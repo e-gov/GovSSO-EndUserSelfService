@@ -1,0 +1,48 @@
+govsso-enduserselfservice:
+  session:
+    base-url: https://session.localhost:15443/
+    tls:
+      trust-store: classpath:enduserselfservice.localhost.session.truststore.p12
+      trust-store-password: changeit
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: configprops,env,health,info
+  info:
+    git:
+      mode: full
+    java:
+      enabled: true
+    os:
+      enabled: true
+
+server:
+  port: 25443
+  ssl:
+    enabled: true
+    enabled-protocols: TLSv1.3
+    key-store: classpath:enduserselfservice.localhost.keystore.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    protocol: TLS
+
+spring:
+  application:
+    name: govsso-enduserselfservice
+  main:
+    banner-mode: off
+
+tara:
+  client-id: govsso-enduserselfservice
+  client-secret: secret
+  issuer-uri: https://tara.localhost:16443/
+  redirect-uri: https://enduserselfservice.localhost:25443/login/oauth2/code/tara
+  trust-store: classpath:enduserselfservice.localhost.tara.truststore.p12
+  trust-store-password: changeit
