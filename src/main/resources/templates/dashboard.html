@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <!-- CSRF Protection -->
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>GovSSO End-User Self-Service</title> <!-- TODO -->
+</head>
+<body>
+<div>
+    Hi,
+    <th:block th:text="${userAttributes.get('profile_attributes').get('given_name')}"></th:block>
+    <th:block th:text="${userAttributes.get('profile_attributes').get('family_name')}"></th:block>
+</div>
+<div>
+    <a href="/logout">Log out</a> <!-- TODO: POST instead -->
+</div>
+</body>
+</html>

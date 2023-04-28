@@ -32,6 +32,11 @@ server:
     key-store-password: changeit
     key-store-type: PKCS12
     protocol: TLS
+  servlet:
+    session:
+      cookie:
+        name: __Host-SESSION
+        same-site: lax
 
 spring:
   application:
@@ -42,7 +47,7 @@ spring:
 tara:
   client-id: govsso-enduserselfservice
   client-secret: secret
-  issuer-uri: https://tara.localhost:16443/
+  issuer-uri: https://tara.localhost:16443
   redirect-uri: https://enduserselfservice.localhost:25443/login/oauth2/code/tara
   trust-store: classpath:enduserselfservice.localhost.tara.truststore.p12
   trust-store-password: changeit

@@ -20,7 +20,7 @@ public abstract class BaseTest extends BaseTestLoggingAssertion {
 
     protected static final WireMockServer SESSION_MOCK_SERVER = new WireMockServer(WireMockConfiguration.wireMockConfig()
             .httpDisabled(true)
-            .httpsPort(15442)
+            .httpsPort(25442)
             .keystorePath("src/test/resources/session.localhost.keystore.p12")
             .keystorePassword("changeit")
             .keyManagerPassword("changeit")
