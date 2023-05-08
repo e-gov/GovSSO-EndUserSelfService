@@ -34,15 +34,15 @@ public class TaraOidcConfiguration {
 
     @Bean
     ClientRegistrationRepository clientRegistrationRepository(
-            TaraProperties taraProperties,
+            TaraConfigurationProperties taraConfigurationProperties,
             RestOperations taraRestTemplate) {
         ClientRegistration govSsoClientRegistration =
-                createClientRegistration(REGISTRATION_ID, taraProperties, taraRestTemplate);
+                createClientRegistration(REGISTRATION_ID, taraConfigurationProperties, taraRestTemplate);
         return new InMemoryClientRegistrationRepository(List.of(govSsoClientRegistration));
     }
 
     public ClientRegistration createClientRegistration(
-            String registrationId, TaraProperties properties, RestOperations restOperations) {
+            String registrationId, TaraConfigurationProperties properties, RestOperations restOperations) {
         String issuer = requireNonNull(properties.issuerUri());
         OIDCProviderMetadata metadata = getMetadata(issuer, restOperations);
         return ClientRegistration.withRegistrationId(registrationId)

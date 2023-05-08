@@ -39,7 +39,6 @@ public class SecurityConfigurer {
     public static final Duration HST_MAX_AGE = Duration.ofDays(186);
 
     @Bean
-    // TODO: Review commented code
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             RestOperations taraRestTemplate,

@@ -1,5 +1,6 @@
 package ee.ria.govsso.enduserselfservice.configuration.tara;
 
+import lombok.SneakyThrows;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
@@ -15,11 +16,6 @@ import org.springframework.security.oauth2.core.http.converter.OAuth2ErrorHttpMe
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -27,9 +23,7 @@ import java.util.stream.Stream;
 public class TaraRestTemplateConfiguration {
 
     @Bean
-    RestTemplate taraRestTemplate(TaraProperties properties)
-            throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException,
-            KeyManagementException {
+    RestTemplate taraRestTemplate(TaraConfigurationProperties properties) {
         SSLContext sslContext = createSslContext(properties);
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
         @SuppressWarnings("resource")
@@ -48,8 +42,8 @@ public class TaraRestTemplateConfiguration {
         return restTemplate;
     }
 
-    private static SSLContext createSslContext(TaraProperties properties)
-            throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, CertificateException, IOException {
+    @SneakyThrows
+    private static SSLContext createSslContext(TaraConfigurationProperties properties) {
         return new SSLContextBuilder()
                 .loadTrustMaterial(
                         properties.trustStore().getURL(),

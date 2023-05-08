@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Validated
 @ConstructorBinding
 @ConfigurationProperties("tara")
-public record TaraProperties(
+public record TaraConfigurationProperties(
         @NotNull String clientId,
         @NotNull String clientSecret,
         @NotNull String redirectUri,

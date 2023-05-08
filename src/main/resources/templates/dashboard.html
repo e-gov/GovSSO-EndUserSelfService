@@ -16,8 +16,49 @@
     <th:block th:text="${userAttributes.get('profile_attributes').get('given_name')}"></th:block>
     <th:block th:text="${userAttributes.get('profile_attributes').get('family_name')}"></th:block>
 </div>
+<p>Active sessions: <th:block th:text="${#lists.size(govssoSessions)}"></th:block> </p>
+<p><a href="#" data-function="end-all-sessions">End all</a></p>
+<hr />
+<th:block th:each="govssoSession: ${govssoSessions}">
+    <dl>
+        <dt>ID</dt>
+        <dd th:text="${govssoSession.sessionId}"></dd>
+        <dt>User agent</dt>
+        <dd th:text="${govssoSession.userAgent}"></dd>
+        <dt>IPs</dt>
+        <dd th:text="${#strings.listJoin(govssoSession.ipAddresses, ', ')}"></dd>
+        <dt>Authenticated at</dt>
+        <dd th:text="${#temporals.formatISO(govssoSession.authenticatedAt)}"></dd>
+        <dt>Services</dt>
+        <dd>
+            <ul>
+                <li th:each="service: ${govssoSession.services}">
+                    <dl>
+                        <dt>Name</dt>
+                        <dd th:text="${service.clientNames.get('et')}"></dd>
+                        <dt>Authenticated at</dt>
+                        <dd th:text="${#temporals.formatISO(service.authenticatedAt)}"></dd>
+                        <dt>Expires at</dt>
+                        <dd th:text="${#temporals.formatISO(service.expiresAt)}"></dd>
+                        <dt>Last updated at</dt>
+                        <dd th:text="${#temporals.formatISO(service.lastUpdatedAt)}"></dd>
+                    </dl>
+                </li>
+            </ul>
+        </dd>
+    </dl>
+    <p>
+        <a href="#" data-function="end-session" th:data-session-id="${govssoSession.sessionId}">
+            End session
+        </a>
+    </p>
+    <hr />
+</th:block>
 <div>
     <a href="/logout">Log out</a> <!-- TODO: POST instead -->
 </div>
+
+<script defer th:src="@{/scripts/jquery-3.6.4.min.js}"></script>
+<script defer th:src="@{/scripts/main.js}"></script>
 </body>
 </html>
