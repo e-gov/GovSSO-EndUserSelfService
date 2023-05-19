@@ -65,7 +65,7 @@ GovSSO end user self-service provides TODO
 | :-------- | :-------- | :---------- | :------ |
 | `tara.client-id` | Yes | TARA client identifier. The client ID is issued by [RIA](https://www.ria.ee/). | `id123` |
 | `tara.client-secret` | Yes | TARA client password. The client password is issued by [RIA](https://www.ria.ee/). | `secret123` |
-| `tara.issuer-uri` | Yes | TARA OIDC issuer URI where `${tara.issuer-uri}/.well-known/openid-configuration` must return OIDC well-known configuration. `tara.issuer-url` must exactly match `issuer` value published in OIDC well-known configuration. | `https://tara.localhost:16443/` |
+| `tara.issuer-uri` | Yes | TARA OIDC issuer URI where `${tara.issuer-uri}/.well-known/openid-configuration` must return OIDC well-known configuration. `tara.issuer-url` must exactly match `issuer` value published in OIDC well-known configuration. | `https://tara.localhost:16443` |
 | `tara.redirect-uri` | Yes | TARA client redirection URI. Publicly accessible URL of current application's OIDC authorization code flow redirection endpoint. The redirection URI is registered with [RIA](https://www.ria.ee/). | `https://enduserselfservice.localhost:25443/login/oauth2/code/tara` |
 | `tara.trust-store` | Yes | Location of trust-store, containing trust anchors (CA or end-entity certificates) for verifying TLS connections to TARA. Trust anchors must be limited according to [TARA documentation](https://e-gov.github.io/TARA-Doku/TechnicalSpecification#512-verifying-the-tls-connection-to-endpoints).  | `classpath:path/to/trust-store.p12` or `file:/path/to/trust-store.p12` |
 | `tara.trust-store-password` | Yes | Trust-store password. | `changeit` |
