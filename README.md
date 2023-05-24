@@ -54,10 +54,10 @@ GovSSO end user self-service provides TODO
 
 | Parameter | Mandatory | Description | Example |
 | :-------- | :-------- | :---------- | :------ |
-| `govsso-enduserselfservice.session.base-url` | Yes | GovSSO Session administrative API base URL. | `https://session.localhost:15443/` |
-| `govsso-enduserselfservice.session.tls.trust-store` | Yes | Location of trust-store, containing trust anchors (CA or end-entity certificates) for verifying TLS connections to GovSSO Session. | `classpath:path/to/trust-store.p12` or `file:/path/to/trust-store.p12` |
-| `govsso-enduserselfservice.session.tls.trust-store-password` | Yes | Trust-store password. | `changeit` |
-| `govsso-enduserselfservice.session.tls.trust-store-type` | No | Trust-store type. If not provided, defaults to `PKCS12`. | `PKCS12` |
+| `govsso-enduserselfservice.govsso-session.base-url` | Yes | GovSSO Session administrative API base URL. | `https://session.localhost:15443/` |
+| `govsso-enduserselfservice.govsso-session.tls.trust-store` | Yes | Location of trust-store, containing trust anchors (CA or end-entity certificates) for verifying TLS connections to GovSSO Session. | `classpath:path/to/trust-store.p12` or `file:/path/to/trust-store.p12` |
+| `govsso-enduserselfservice.govsso-session.tls.trust-store-password` | Yes | Trust-store password. | `changeit` |
+| `govsso-enduserselfservice.govsso-session.tls.trust-store-type` | No | Trust-store type. If not provided, defaults to `PKCS12`. | `PKCS12` |
 
 ### Integration with TARA
 
@@ -69,6 +69,18 @@ GovSSO end user self-service provides TODO
 | `tara.redirect-uri` | Yes | TARA client redirection URI. Publicly accessible URL of current application's OIDC authorization code flow redirection endpoint. The redirection URI is registered with [RIA](https://www.ria.ee/). | `https://enduserselfservice.localhost:25443/login/oauth2/code/tara` |
 | `tara.trust-store` | Yes | Location of trust-store, containing trust anchors (CA or end-entity certificates) for verifying TLS connections to TARA. Trust anchors must be limited according to [TARA documentation](https://e-gov.github.io/TARA-Doku/TechnicalSpecification#512-verifying-the-tls-connection-to-endpoints).  | `classpath:path/to/trust-store.p12` or `file:/path/to/trust-store.p12` |
 | `tara.trust-store-password` | Yes | Trust-store password. | `changeit` |
+
+### Ignite
+
+| Parameter | Mandatory | Description | Example |
+| :-------- | :-------- | :---------- | :------ |
+| `ignite.discovery-spi.ip-finder.addresses` | Yes | Ignite cluster node discovery addresses. Should minimally contain local node IP address. | `['192.168.1.1','192.168.1.2']` |
+| `ignite.ssl-context-factory.key-store-type` | Yes | Key-store type. | `PKCS12` |
+| `ignite.ssl-context-factory.key-store-file-path` | Yes | Location of key-store, containing private key and certificate for serving TLS connections. | `path/to/key-store.p12` |
+| `ignite.ssl-context-factory.key-store-password` | Yes | Key-store password. | `changeit` |
+| `ignite.ssl-context-factory.trust-store-type` | Yes | Trust-store type. | `PKCS12` |
+| `ignite.ssl-context-factory.trust-store-file-path` | Yes | Location of trust-store, containing trust anchors (CA or end-entity certificates) for verifying TLS connections to other Ignite instances. | `path/to/trust-store.p12` |
+| `ignite.ssl-context-factory.trust-store-password` | Yes | Trust-store password. | `changeit` |
 
 ## Non-pom.xml Licenses
 

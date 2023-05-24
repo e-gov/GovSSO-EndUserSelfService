@@ -28,6 +28,8 @@ spring:
     name: govsso-enduserselfservice
   main:
     banner-mode: off
+  session:
+    timeout: PT30m
 
 tara:
   client-id: govsso-enduserselfservice
@@ -36,3 +38,18 @@ tara:
   redirect-uri: https://enduserselfservice.localhost:25443/login/oauth2/code/tara
   trust-store: classpath:enduserselfservice.localhost.tara.truststore.p12
   trust-store-password: changeit
+
+ignite:
+  ignite-instance-name: govsso-enduserselfservice-ignite
+  metrics-log-frequency: 300000
+  discovery-spi:
+    ip-finder:
+      addresses:
+        - 127.0.0.1
+  ssl-context-factory:
+    key-store-type: PKCS12
+    key-store-file-path: src/main/resources/enduserselfservice.localhost.keystore.p12
+    key-store-password: changeit
+    trust-store-type: PKCS12
+    trust-store-file-path: src/main/resources/enduserselfservice.localhost.session.truststore.p12
+    trust-store-password: changeit

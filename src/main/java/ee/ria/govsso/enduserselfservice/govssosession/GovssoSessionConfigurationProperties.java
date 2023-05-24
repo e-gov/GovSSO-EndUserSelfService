@@ -11,7 +11,7 @@ import java.net.URL;
 
 @Validated
 @ConstructorBinding
-@ConfigurationProperties("govsso-enduserselfservice.session")
+@ConfigurationProperties("govsso-enduserselfservice.govsso-session")
 public record GovssoSessionConfigurationProperties(
         @NotNull URL baseUrl,
         @NotNull Tls tls

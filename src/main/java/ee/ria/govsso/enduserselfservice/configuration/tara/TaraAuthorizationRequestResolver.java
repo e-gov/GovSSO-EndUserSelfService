@@ -48,9 +48,11 @@ public class TaraAuthorizationRequestResolver implements OAuth2AuthorizationRequ
         Map<String, Object> additionalParameters = new LinkedHashMap<>(authorizationRequest.getAdditionalParameters());
 
         /*
+            Make sure a session exists, otherwise attempting to change session ID will cause an exception.
             OAuth2AuthorizationRequestRedirectFilter will create new session right after resolving
             authorization request, so it's ok to create it here also.
         */
+        httpServletRequest.getSession();
         httpServletRequest.changeSessionId();
 
         //TODO (GSSO-617)

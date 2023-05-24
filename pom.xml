@@ -69,6 +69,15 @@
         <dependency>
             <groupId>org.apache.httpcomponents.core5</groupId>
             <artifactId>httpcore5-reactive</artifactId>
+        </dependency>        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-core</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-slf4j</artifactId>
+            <version>2.15.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -111,6 +120,10 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>
             <version>${wiremock.version}</version>
@@ -149,6 +162,19 @@
                 <configuration>
                     <runOrder>random</runOrder>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <argLine>
+                        --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
+                        --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+                        --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+                        --add-opens=java.management/com.sun.jmx.mbeanserver=ALL-UNNAMED
+                        --add-opens=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED
+                        --add-opens=java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED
+                        --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED
+                        --add-opens=java.base/java.io=ALL-UNNAMED
+                        --add-opens=java.base/java.nio=ALL-UNNAMED
+                        --add-opens=java.base/java.util=ALL-UNNAMED
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -184,7 +210,21 @@
                 <configuration>
                     <environmentVariables>
                         <ELASTIC_APM_ENABLED>false</ELASTIC_APM_ENABLED>
+                        <IGNITE_UPDATE_NOTIFIER>false</IGNITE_UPDATE_NOTIFIER>
                     </environmentVariables>
+                    <jvmArguments>
+                        --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
+                        --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+                        --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+                        --add-opens=java.management/com.sun.jmx.mbeanserver=ALL-UNNAMED
+                        --add-opens=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED
+                        --add-opens=java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED
+                        --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED
+                        --add-opens=java.base/java.io=ALL-UNNAMED
+                        --add-opens=java.base/java.nio=ALL-UNNAMED
+                        --add-opens=java.base/java.util=ALL-UNNAMED
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                    </jvmArguments>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

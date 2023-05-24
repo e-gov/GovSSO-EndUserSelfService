@@ -1,6 +1,8 @@
 package ee.ria.govsso.enduserselfservice.configuration;
 
 import ee.ria.govsso.enduserselfservice.configuration.tara.TaraAuthorizationRequestResolver;
+import ee.ria.govsso.enduserselfservice.session.SessionConfigurationProperties;
+import ee.ria.govsso.enduserselfservice.session.SessionMaxAgeFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.client.RestOperations;
 
@@ -42,7 +45,8 @@ public class SecurityConfigurer {
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             RestOperations taraRestTemplate,
-            ClientRegistrationRepository clientRegistrationRepository) throws Exception {
+            ClientRegistrationRepository clientRegistrationRepository,
+            SessionConfigurationProperties sessionConfigurationProperties) throws Exception {
         // @formatter:off
         http
                 .requestCache()
@@ -80,6 +84,7 @@ public class SecurityConfigurer {
                     .logoutSuccessUrl("/");
         // TODO Configure Spring in such a way that a session wouldn't be created when it's not necessary (see AUT-1048)
         // @formatter:on
+        http.addFilterAfter(new SessionMaxAgeFilter(sessionConfigurationProperties), SecurityContextPersistenceFilter.class);
         return http.build();
     }
 
