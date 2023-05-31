@@ -1,5 +1,8 @@
 govsso-enduserselfservice:
   session:
+    max-idle-time: PT15m
+    max-age: PT12h
+  govsso-session:
     base-url: https://session.localhost:15443/
     tls:
       trust-store: classpath:enduserselfservice.localhost.session.truststore.p12
@@ -11,6 +14,11 @@ management:
       probes:
         enabled: true
       show-details: always
+      group:
+        readiness:
+          include:
+            - readinessState
+            - ignite
   endpoints:
     web:
       exposure:
@@ -28,8 +36,6 @@ spring:
     name: govsso-enduserselfservice
   main:
     banner-mode: off
-  session:
-    timeout: PT30m
 
 tara:
   client-id: govsso-enduserselfservice
@@ -42,6 +48,9 @@ tara:
 ignite:
   ignite-instance-name: govsso-enduserselfservice-ignite
   metrics-log-frequency: 300000
+  system-worker-blocked-timeout: 86400000
+  failure-detection-timeout: 86400000
+  client-failure-detection-timeout: 86400000
   discovery-spi:
     ip-finder:
       addresses:
@@ -53,3 +62,10 @@ ignite:
     trust-store-type: PKCS12
     trust-store-file-path: src/main/resources/enduserselfservice.localhost.session.truststore.p12
     trust-store-password: changeit
+    protocol: TLSv1.3
+    protocols:
+      - TLSv1.3
+    cipher-suites:
+      - TLS_AES_128_GCM_SHA256
+      - TLS_AES_256_GCM_SHA384
+      - TLS_CHACHA20_POLY1305_SHA256

@@ -63,6 +63,9 @@ tara:
 ignite:
   ignite-instance-name: govsso-enduserselfservice-ignite
   metrics-log-frequency: 300000
+  system-worker-blocked-timeout: 86400000
+  failure-detection-timeout: 86400000
+  client-failure-detection-timeout: 86400000
   discovery-spi:
     ip-finder:
       addresses:
@@ -74,3 +77,10 @@ ignite:
     trust-store-type: PKCS12
     trust-store-file-path: src/main/resources/enduserselfservice.localhost.session.truststore.p12
     trust-store-password: changeit
+    protocol: TLSv1.3
+    protocols:
+      - TLSv1.3
+    cipher-suites:
+      - TLS_AES_128_GCM_SHA256
+      - TLS_AES_256_GCM_SHA384
+      - TLS_CHACHA20_POLY1305_SHA256
