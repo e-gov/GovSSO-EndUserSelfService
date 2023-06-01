@@ -16,6 +16,10 @@ import javax.cache.Cache;
 import java.io.Serializable;
 import java.time.Duration;
 
+/* Use a custom Ignite-backed SessionRepository implementation instead of what's provided by
+ * `org.apache.ignite:ignite-spring-session-ext` as I could not get that to work properly. It seemed that the version of
+ * H2 DB we had on classpath was not the correct one but it appeared to have the correct version number.
+ */
 @Slf4j
 @Component
 public class IgniteSessionRepository implements SessionRepository<Session> {

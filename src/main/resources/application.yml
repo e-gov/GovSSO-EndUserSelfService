@@ -75,7 +75,7 @@ ignite:
     key-store-file-path: src/main/resources/enduserselfservice.localhost.keystore.p12
     key-store-password: changeit
     trust-store-type: PKCS12
-    trust-store-file-path: src/main/resources/enduserselfservice.localhost.session.truststore.p12
+    trust-store-file-path: src/main/resources/enduserselfservice.localhost.ignite.truststore.p12
     trust-store-password: changeit
     protocol: TLSv1.3
     protocols:

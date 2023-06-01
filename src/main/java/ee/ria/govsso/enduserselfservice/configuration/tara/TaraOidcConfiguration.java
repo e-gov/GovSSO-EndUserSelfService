@@ -29,8 +29,7 @@ public class TaraOidcConfiguration {
 
     public static final String REGISTRATION_ID = "tara";
     public static final String OPENID_SCOPE = "openid";
-
-    private static final String OIDC_METADATA_PATH = "/.well-known/openid-configuration";
+    public static final String OIDC_METADATA_PATH = "/.well-known/openid-configuration";
 
     @Bean
     ClientRegistrationRepository clientRegistrationRepository(

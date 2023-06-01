@@ -15,6 +15,7 @@ GovSSO end user self-service provides TODO
 2. If you have generated new TLS certificates (doable at project GOVSSO-Session) after the last copy, then:
     * copy-replace `GOVSSO-Session/local/tls/enduserselfservice/*.p12` files to `src/main/resources`;
     * copy-replace `GOVSSO-Session/local/tls/session/session.localhost.keystore.p12` to `src/test/resources`.
+    * copy-replace `GOVSSO-Session/local/tls/tara/tara.localhost.keystore.p12` to `src/test/resources`.
 3. Add `127.0.0.1 session.localhost tara.localhost` line to `hosts` file. This is needed only for requests originating
    from GOVSSO-EndUserSelfService when it's running locally (not in Docker Compose). It's not needed for web browsers as
    popular browsers already have built-in support for resolving `*.localhost` subdomains.

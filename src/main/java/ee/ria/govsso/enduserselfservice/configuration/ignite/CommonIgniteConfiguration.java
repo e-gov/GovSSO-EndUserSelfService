@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
+/* This is used instead of `org.apache.ignite:ignite-spring-boot-autoconfigure-ext` because we want to configure
+ * Ignite a little differently from what is supported by that. We want to apply Java configuration before
+ * configuration properties.
+ */
 @Configuration
 public class CommonIgniteConfiguration {
 
