@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -22,14 +21,13 @@ public class IndexController {
     private final GovssoSessionService govssoSessionService;
 
     @GetMapping("/")
-    public Mono<ModelAndView> index(@AuthenticationPrincipal OidcUser oidcUser) {
+    public ModelAndView index(@AuthenticationPrincipal OidcUser oidcUser) {
         if (oidcUser == null) {
-            return Mono.just(new ModelAndView("index"));
+            return new ModelAndView("index");
         }
-        return govssoSessionService.getSubjectSessions(oidcUser.getSubject())
-                .collectList()
-                .map(sessions -> createDashboardViewModel(oidcUser, sessions))
-                .map(viewModel -> new ModelAndView("dashboard", viewModel));
+        List<GovssoSession> sessions = govssoSessionService.getSubjectSessions(oidcUser.getSubject());
+        Map<String, Object> model = createDashboardViewModel(oidcUser, sessions);
+        return new ModelAndView("dashboard", model);
     }
 
     private static Map<String, Object> createDashboardViewModel(OidcUser oidcUser, List<GovssoSession> sessions) {

@@ -3,8 +3,8 @@ package ee.ria.govsso.enduserselfservice.govssosession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -14,31 +14,35 @@ public class GovssoSessionService {
 
     private final WebClient sessionRestClient;
 
-    public Flux<GovssoSession> getSubjectSessions(String subject) {
+    public List<GovssoSession> getSubjectSessions(String subject) {
         return sessionRestClient
                 .get()
                 .uri("/admin/sessions/{subject}", subject)
                 .accept(APPLICATION_JSON)
                 .retrieve()
-                .bodyToFlux(GovssoSession.class);
+                .bodyToFlux(GovssoSession.class)
+                .collectList()
+                .blockOptional().orElseThrow();
     }
 
-    public Mono<Void> endSession(String subject, String sessionId) {
-        return sessionRestClient
+    public void endSession(String subject, String sessionId) {
+        sessionRestClient
                 .delete()
                 .uri("/admin/sessions/{subject}/{sessionId}", subject, sessionId)
                 .accept(APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
     }
 
-    public Mono<Void> endSubjectSessions(String subject) {
-        return sessionRestClient
+    public void endSubjectSessions(String subject) {
+        sessionRestClient
                 .delete()
                 .uri("/admin/sessions/{subject}", subject)
                 .accept(APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
     }
 
 }
