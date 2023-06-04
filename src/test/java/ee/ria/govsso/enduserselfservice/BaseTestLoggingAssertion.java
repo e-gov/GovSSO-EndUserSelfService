@@ -30,7 +30,7 @@ import static org.slf4j.Logger.ROOT_LOGGER_NAME;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Slf4j
-class BaseTestLoggingAssertion {
+public class BaseTestLoggingAssertion {
 
     private static ListAppender<ILoggingEvent> mockLogAppender;
 
