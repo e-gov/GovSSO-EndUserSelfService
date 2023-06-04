@@ -4,6 +4,9 @@ import co.elastic.apm.api.ElasticApm;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -12,20 +15,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class RequestCorrelationFilter extends OncePerRequestFilter {
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE) // Ensure that logging attributes are set as early as possible.
+public class TraceIdLoggingFilter extends OncePerRequestFilter {
 
-    private static final String MDC_ATTRIBUTE_KEY_CLIENT_IP = "client.ip";
     private static final String MDC_ATTRIBUTE_KEY_REQUEST_TRACE_ID = "trace.id";
-    public static final String REQUEST_ATTRIBUTE_NAME_REQUEST_ID = "requestId";
+    private static final String REQUEST_ATTRIBUTE_NAME_REQUEST_ID = "requestId";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String requestTraceId = ElasticApm.currentTransaction().getTraceId();
-        if (StringUtils.isEmpty(requestTraceId)) {
+        boolean elasticApmTraceIdExists = StringUtils.isNotEmpty(requestTraceId);
+        if (!elasticApmTraceIdExists) {
+            // Use same format as Elastic APM Agent.
             requestTraceId = RandomStringUtils.random(32, "0123456789abcdef");
-            MDC.put(MDC_ATTRIBUTE_KEY_REQUEST_TRACE_ID, requestTraceId);
         }
 
         // NB! Set traceId also as HttpServletRequest attribute to make it accessible for Tomcat's AccessLogValve.
@@ -34,19 +39,15 @@ public class RequestCorrelationFilter extends OncePerRequestFilter {
         // is logged. At other times, tracing ID-s are missing from MDC, when Elastic APM agent is enabled.
         request.setAttribute(REQUEST_ATTRIBUTE_NAME_REQUEST_ID, requestTraceId);
 
-        String ipAddress = request.getRemoteAddr();
-        if (StringUtils.isNotEmpty(ipAddress)) {
-            MDC.put(MDC_ATTRIBUTE_KEY_CLIENT_IP, ipAddress);
-        } else {
-            MDC.remove(MDC_ATTRIBUTE_KEY_CLIENT_IP);
+        if (!elasticApmTraceIdExists) {
+            MDC.put(MDC_ATTRIBUTE_KEY_REQUEST_TRACE_ID, requestTraceId);
         }
-
-        filterChain.doFilter(request, response);
-
-        // TODO Ideally all MDC values that are set here should be cleared after request completes - investigate where
-        //  is the correct place to do that. Doing it here clears trace.id too early so that error page can not access
-        //  it.
-        //  As the second-best solution, we are (re)setting _all_ values above at the start of request. Usually request
-        //  threads and background threads are not cross-used.
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            if (!elasticApmTraceIdExists) {
+                MDC.remove(MDC_ATTRIBUTE_KEY_REQUEST_TRACE_ID);
+            }
+        }
     }
 }
