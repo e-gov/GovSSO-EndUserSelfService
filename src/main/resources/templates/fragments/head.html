@@ -1,0 +1,10 @@
+<head xmlns:th="http://www.w3.org/1999/xhtml">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <!-- CSRF Protection -->
+    <meta th:name="_csrf" th:content="${_csrf.token}">
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}">
+    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/styles/main.css}">
+    <title th:text="#{label.page.title}"></title>
+</head>

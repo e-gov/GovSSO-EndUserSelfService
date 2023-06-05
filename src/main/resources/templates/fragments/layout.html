@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html th:lang="${#locale.language}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="@{/fragments/head}"></head>
+<body>
+<div class="c-layout">
+    <div class="c-layout--full">
+        <div th:replace="~{fragments/taraheader}">Header</div>
+        <div class="container" id="pagecontent">
+            <noscript>
+                <div class="alert alert-error" role="alert">
+                    <p><strong th:utext="#{message.warning.noscript}"></strong></p>
+                </div>
+                <br>
+            </noscript>
+            <th:block layout:fragment="content"></th:block>
+        </div>
+    </div>
+    <footer th:replace="~{fragments/tarafooter}">Footer</footer>
+</div>
+<script defer th:src="@{/scripts/jquery-3.6.4.min.js}"></script>
+<script defer th:src="@{/scripts/main.js}"></script>
+<!-- Hidden CSRF form field will be automatically added to the form. This can cause issues with HTML validation but
+     there's not much we can do about it. -->
+<form id="logoutForm" th:action="@{/logout}" method="post"></form>
+</body>
+</html>
+

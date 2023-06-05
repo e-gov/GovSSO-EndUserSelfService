@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Jacksonized
 @Builder
+// TODO: Use `Instant` instead of `OffsetDateTime` for date-time fields as the offset is not really relevant.
 public record GovssoSession(
          String sessionId,
          OffsetDateTime authenticatedAt,

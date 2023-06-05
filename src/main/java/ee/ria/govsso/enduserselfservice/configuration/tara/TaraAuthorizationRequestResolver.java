@@ -4,6 +4,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
@@ -16,10 +17,12 @@ import static ee.ria.govsso.enduserselfservice.configuration.tara.TaraOidcConfig
 public class TaraAuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
     private final OAuth2AuthorizationRequestResolver requestResolver;
+    private final LocaleResolver localeResolver;
 
-    public TaraAuthorizationRequestResolver(ClientRegistrationRepository clientRegistrationRepository) {
+    public TaraAuthorizationRequestResolver(ClientRegistrationRepository clientRegistrationRepository, LocaleResolver localeResolver) {
         this.requestResolver =
                 new DefaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization");
+        this.localeResolver = localeResolver;
     }
 
     @Override
@@ -55,8 +58,11 @@ public class TaraAuthorizationRequestResolver implements OAuth2AuthorizationRequ
         httpServletRequest.getSession();
         httpServletRequest.changeSessionId();
 
-        //TODO (GSSO-617)
-        //additionalParameters.put(TaraParameters.UI_LOCALES, LocaleContextHolder.getLocale());
+        /* Use `LocaleResolver` instead of `LocaleContextHolder` as the latter doesn't work for some reason.
+         * I assume `LocaleContextHolder` would be initialized later in the filter chain and returns some kind of
+         * default value here but who knows.
+         */
+        additionalParameters.put(TaraParameters.UI_LOCALES, localeResolver.resolveLocale(httpServletRequest));
         additionalParameters.put(TaraParameters.ACR_VALUES, MINIMUM_LEVEL_OF_ASSURANCE.name().toLowerCase());
 
         return OAuth2AuthorizationRequest.from(authorizationRequest)

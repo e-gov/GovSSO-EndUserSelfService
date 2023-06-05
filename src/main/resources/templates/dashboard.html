@@ -1,64 +1,71 @@
-<!DOCTYPE html>
-<html lang="et" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <!-- CSRF Protection -->
-    <meta th:name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>GovSSO End-User Self-Service</title> <!-- TODO -->
-</head>
+<html layout:decorate="~{fragments/layout}" th:lang="${#locale.language}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <body>
-<div>
-    Hi,
-    <th:block th:text="${userAttributes.get('profile_attributes').get('given_name')}"></th:block>
-    <th:block th:text="${userAttributes.get('profile_attributes').get('family_name')}"></th:block>
-</div>
-<p>Active sessions: <th:block th:text="${#lists.size(govssoSessions)}"></th:block> </p>
-<p><a href="#" data-function="end-all-sessions">End all</a></p>
-<hr />
-<th:block th:each="govssoSession: ${govssoSessions}">
-    <dl>
-        <dt>ID</dt>
-        <dd th:text="${govssoSession.sessionId}"></dd>
-        <dt>User agent</dt>
-        <dd th:text="${govssoSession.userAgent}"></dd>
-        <dt>IPs</dt>
-        <dd th:text="${#strings.listJoin(govssoSession.ipAddresses, ', ')}"></dd>
-        <dt>Authenticated at</dt>
-        <dd th:text="${#temporals.formatISO(govssoSession.authenticatedAt)}"></dd>
-        <dt>Services</dt>
-        <dd>
-            <ul>
-                <li th:each="service: ${govssoSession.services}">
-                    <dl>
-                        <dt>Name</dt>
-                        <dd th:text="${service.clientNames.get('et')}"></dd>
-                        <dt>Authenticated at</dt>
-                        <dd th:text="${#temporals.formatISO(service.authenticatedAt)}"></dd>
-                        <dt>Expires at</dt>
-                        <dd th:text="${#temporals.formatISO(service.expiresAt)}"></dd>
-                        <dt>Last updated at</dt>
-                        <dd th:text="${#temporals.formatISO(service.lastUpdatedAt)}"></dd>
-                    </dl>
-                </li>
-            </ul>
-        </dd>
-    </dl>
-    <p>
-        <a href="#" data-function="end-session" th:data-session-id="${govssoSession.sessionId}">
-            End session
-        </a>
-    </p>
-    <hr />
+<th:block layout:fragment="content" th:remove="tag">
+    <div class="active-sessions">
+        <div class="active-sessions__header">
+            <h2 class="active-sessions__title" th:text="#{label.active-sessions.title}"/>
+            <!-- TODO: active-sessions__info-button -->
+            <button type="button" class="c-btn c-btn--cancel active-sessions__end-all-button"
+                    data-function="end-all-sessions" th:if="${!#lists.isEmpty(govssoSessions)}"
+                    th:text="#{label.active-sessions.end-all.button}"/>
+        </div>
+        <div class="active-sessions__list">
+            <div class="active-sessions__no_sessions" th:if="${#lists.isEmpty(govssoSessions)}"
+                 th:text="#{label.active-sessions.no-sessions}"/>
+            <div class="active-sessions__session" th:each="govssoSession: ${govssoSessions}">
+                <a href="#" class="c-btn c-btn--from-link active-sessions__session-expand-toggle"
+                   data-function="toggle-session-expansion">
+                    <i class="icon icon-expand"></i>
+                </a>
+                <div class="active-sessions__session-data">
+                    <div class="active-sessions__session-primary-data">
+                        <div translate="no" th:text="${govssoSession.sessionId}"/>
+                        <div th:with="servicesCount=${#lists.size(govssoSession.services)}">
+                             <th:block th:if="${servicesCount} == 1"
+                                       th:text="#{label.active-sessions.services-count.singular}"/>
+                             <th:block th:unless="${servicesCount} == 1"
+                                       th:text="#{label.active-sessions.services-count.plural(${servicesCount})}"/>
+                        </div>
+                        <!-- TODO: Display delta instead of date-time -->
+                        <div th:text="#{label.active-sessions.session-start-time(${#prettyDates.dateTime(govssoSession.authenticatedAt)})}"/>
+                        <div>
+                            <a href="#" class="c-btn c-btn--from-link active-sessions__session-end-button"
+                               data-function="end-session" th:data-session-id="${govssoSession.sessionId}">
+                                <i class="icon icon-cross"></i>
+                                <th:block th:text="#{label.active-sessions.end-session-button}"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="active-sessions__session-secondary-data">
+                        <div class="active-sessions__session-secondary-data-left">
+                            <p th:with="ipCount=${#lists.size(govssoSession.ipAddresses)}">
+                                <th:block th:if="${ipCount} == 1" th:text="#{label.active-sessions.ip.singular}"/>
+                                <th:block th:unless="${ipCount} == 1" th:text="#{label.active-sessions.ip.plural}"/>
+                                <span translate="no" th:text="${#strings.listJoin(govssoSession.ipAddresses, ', ')}"/>
+                            </p>
+                            <p>
+                                <th:block th:text="#{label.active-sessions.session-id}"/>
+                                <span translate="no" th:text="${govssoSession.sessionId}"/>
+                            </p>
+                        </div>
+                        <div class="active-sessions__session-secondary-data-right">
+                            <p th:text="#{label.active-sessions.login-time(${#prettyDates.dateTime(govssoSession.authenticatedAt)})}"/>
+                            <p th:each="service: ${govssoSession.services}">
+                                <strong translate="no" th:text="${service.clientNames.get(#locale.language)}"/>,
+                                <th:block
+                                        th:text="#{label.active-sessions.service-start-time(${#prettyDates.dateTime(service.authenticatedAt)})}"/>,
+                                <th:block th:if="${service.expiresAt.isAfter(service.lastUpdatedAt)}"
+                                        th:text="#{label.active-sessions.service-last-active-time(${#prettyDates.dateTime(service.lastUpdatedAt)})}"/>
+                                <th:block th:unless="${service.expiresAt.isAfter(service.lastUpdatedAt)}"
+                                        th:text="#{label.active-sessions.service-inactive-since-time(${#prettyDates.dateTime(service.expiresAt)})}"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </th:block>
-<div>
-    <a href="/logout">Log out</a> <!-- TODO: POST instead -->
-</div>
-
-<script defer th:src="@{/scripts/jquery-3.6.4.min.js}"></script>
-<script defer th:src="@{/scripts/main.js}"></script>
 </body>
 </html>

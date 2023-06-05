@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="et" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <!-- CSRF Protection -->
-    <meta th:name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>GovSSO End-User Self-Service</title> <!-- TODO -->
-</head>
+<html layout:decorate="~{fragments/layout}" th:lang="${#locale.language}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <body>
-    <a href="/oauth2/authorization/tara">Log in</a>
+<th:block layout:fragment="content" th:remove="tag">
+    <div class="login-screen">
+        <h1 class="login-screen__title" th:text="#{label.index.title}"/>
+        <p class="login-screen__description" th:text="#{label.index.description}"/>
+        <a class="c-btn c-btn--primary login-screen__login_button" href="/oauth2/authorization/tara"
+           th:text="#{label.login.button}"/>
+    </div>
+</th:block>
 </body>
 </html>

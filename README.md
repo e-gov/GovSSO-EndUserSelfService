@@ -83,6 +83,11 @@ GovSSO end user self-service provides TODO
 | `ignite.ssl-context-factory.trust-store-file-path` | Yes | Location of trust-store, containing trust anchors (CA or end-entity certificates) for verifying TLS connections to other Ignite instances. | `path/to/trust-store.p12` |
 | `ignite.ssl-context-factory.trust-store-password` | Yes | Trust-store password. | `changeit` |
 
+### Time
+| Parameter | Mandatory | Description | Example |
+| :-------- | :-------- | :---------- | :------ |
+| `govsso-enduserselfservice.time.local-zone` | No | Time zone to be used by the application. Must be valid Java `ZoneId` value. Defaults to system default. | `Europe/Tallinn` | 
+
 ## Non-pom.xml Licenses
 
 * [Maven Wrapper](https://maven.apache.org/wrapper/) - Apache 2.0 license

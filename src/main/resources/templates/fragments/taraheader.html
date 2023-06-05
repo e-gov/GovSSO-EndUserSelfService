@@ -1,0 +1,40 @@
+<div class="c-header-bar" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <header>
+                <p th:text="#{label.header.title}"/>
+            </header>
+            <nav th:aria-label="#{label.aria.language-selection.navigation}">
+                <ul class="c-lang-list">
+                    <th:block th:each="language: ${ {'et', 'en', 'ru'} }"><!-- TODO: languages from java -->
+                        <li class="c-lang-list__item"  th:if="${!#strings.equalsIgnoreCase(language, #locale.language)}">
+                            <a class="c-lang-list__link" th:href="|?lang=${language}|"
+                               th:hreflang="${language}" th:lang="${language}"
+                               th:text="#{'label.header.' + ${language}}"></a>
+                        </li>
+                    </th:block>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="c-header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container c-header__container">
+        <div class="c-header__logo">
+            <div class="c-header__logo-link">
+                <img alt="" aria-hidden="true" th:src="#{logo.header.tara}" th:alt="#{label.header.tara}">
+            </div>
+        </div>
+        <div class="c-header__user" th:if="${userAttributes} != null">
+            <span class="c-header__user-name" translate="no">
+                <th:block th:text="${userAttributes.get('profile_attributes').get('given_name')}"></th:block>
+                <th:block th:text="${userAttributes.get('profile_attributes').get('family_name')}"></th:block>
+            </span>
+            <a href="#" class="c-btn c-btn--from-link c-header__user-logout-button"
+               data-function="logout">
+                <strong>[→</strong>
+                <th:block th:text="#{label.logout.button}"/>
+            </a>
+        </div>
+    </div>
+</div>
