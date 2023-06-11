@@ -1,7 +1,6 @@
 package ee.ria.govsso.enduserselfservice.govssosession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ee.ria.govsso.enduserselfservice.logging.ClientRequestLogger;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
@@ -53,8 +52,7 @@ public class GovssoSessionRestConfiguration {
 
     private ObjectMapper customizeObjectMapper(ObjectMapper objectMapper) {
         return objectMapper.copy()
-                .setPropertyNamingStrategy(SNAKE_CASE)
-                .registerModule(new JavaTimeModule());
+                .setPropertyNamingStrategy(SNAKE_CASE);
     }
 
     @Bean
