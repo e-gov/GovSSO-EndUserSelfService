@@ -17,9 +17,7 @@
     "phonenumber_verified",
     "given_name",
     "family_name",
-    "date_of_birth",
-    "represents_legal_person.name",
-    "represents_legal_person.registry_code"
+    "date_of_birth"
   ],
   "grant_types_supported": [
     "authorization_code"
@@ -33,36 +31,7 @@
     "email",
     "phone",
     "eidas",
-    "eidasonly",
-    "eidas:country:li",
-    "eidas:country:ca",
-    "eidas:country:at",
-    "eidas:country:be",
-    "eidas:country:cy",
-    "eidas:country:cz",
-    "eidas:country:de",
-    "eidas:country:dk",
-    "eidas:country:es",
-    "eidas:country:fr",
-    "eidas:country:gb",
-    "eidas:country:gr",
-    "eidas:country:hr",
-    "eidas:country:hu",
-    "eidas:country:ie",
-    "eidas:country:is",
-    "eidas:country:it",
-    "eidas:country:lt",
-    "eidas:country:lu",
-    "eidas:country:lv",
-    "eidas:country:mt",
-    "eidas:country:nl",
-    "eidas:country:no",
-    "eidas:country:pl",
-    "eidas:country:pt",
-    "eidas:country:se",
-    "eidas:country:si",
-    "eidas:country:sk",
-    "eidas:country:ua"
+    "eidasonly"
   ],
   "token_endpoint_auth_methods_supported": [
     "client_secret_basic"
