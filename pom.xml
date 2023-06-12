@@ -161,13 +161,13 @@
                     <runOrder>random</runOrder>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <argLine>
+                        -DIGNITE_NO_ASCII=true
+                        -DIGNITE_UPDATE_NOTIFIER=false
                         <!--
                           Make necessary JDK APIs available to Ignite according to
                           https://ignite.apache.org/docs/2.15.0/setup#running-ignite-with-java-11-or-later
                           "Java 17" configuration. Additionally, `java.time` is added to support session timeout.
                         -->
-                        -DIGNITE_NO_ASCII=true
-                        -DIGNITE_UPDATE_NOTIFIER=false
                         --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED
                         --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
                         --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
@@ -219,13 +219,13 @@
                         <ELASTIC_APM_ENABLED>false</ELASTIC_APM_ENABLED>
                     </environmentVariables>
                     <jvmArguments>
+                        -DIGNITE_NO_ASCII=true
+                        -DIGNITE_UPDATE_NOTIFIER=false
                         <!--
                           Make necessary JDK APIs available to Ignite according to
                           https://ignite.apache.org/docs/2.15.0/setup#running-ignite-with-java-11-or-later
                           "Java 17" configuration. Additionally, `java.time` is added to support session timeout.
                         -->
-                        -DIGNITE_NO_ASCII=true
-                        -DIGNITE_UPDATE_NOTIFIER=false
                         --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED
                         --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
                         --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
@@ -244,14 +244,14 @@
                         <env>
                             <BPE_DELIM_JAVA_TOOL_OPTIONS xml:space="preserve"> </BPE_DELIM_JAVA_TOOL_OPTIONS>
                             <BPE_APPEND_JAVA_TOOL_OPTIONS>
+                                -DIGNITE_NO_ASCII=true
+                                -DIGNITE_UPDATE_NOTIFIER=false
                                 <!--
                                   Make necessary JDK APIs available to Ignite according to
                                   https://ignite.apache.org/docs/2.15.0/setup#running-ignite-with-java-11-or-later
                                   "Java 17" configuration. Additionally, `java.time` is added to support session
                                   timeout.
                                 -->
-                                -DIGNITE_NO_ASCII=true
-                                -DIGNITE_UPDATE_NOTIFIER=false
                                 --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED
                                 --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
                                 --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
