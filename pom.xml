@@ -181,6 +181,10 @@
                         --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
                         --add-opens=java.base/java.lang=ALL-UNNAMED
                         --add-opens=java.base/java.time=ALL-UNNAMED
+                        <!-- Ignite aggregates all network interface addresses to form work directory name. When machine
+                             has many IPv6 network interfaces, work directory name length may exceed file name length
+                             limit. Disable IPv6 usage to mitigate this. -->
+                        -Djava.net.preferIPv4Stack=true
                     </argLine>
                 </configuration>
             </plugin>
@@ -239,6 +243,10 @@
                         --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED
                         --add-opens=java.base/java.lang=ALL-UNNAMED
                         --add-opens=java.base/java.time=ALL-UNNAMED
+                        <!-- Ignite aggregates all network interface addresses to form work directory name. When machine
+                             has many IPv6 network interfaces, work directory name length may exceed file name length
+                             limit. Disable IPv6 usage to mitigate this. -->
+                        -Djava.net.preferIPv4Stack=true
                     </jvmArguments>
                     <image>
                         <env>
