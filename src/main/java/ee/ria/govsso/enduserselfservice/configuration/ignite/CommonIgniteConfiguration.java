@@ -42,5 +42,4 @@ public class CommonIgniteConfiguration {
     public Consumer<IgniteConfiguration> nodeConfigurer() {
         return cfg -> { /* No-op. */ };
     }
-
 }

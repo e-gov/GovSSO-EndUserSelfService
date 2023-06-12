@@ -7,6 +7,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -20,6 +21,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -32,18 +34,32 @@ public class TaraOidcConfiguration {
     public static final String OIDC_METADATA_PATH = "/.well-known/openid-configuration";
 
     @Bean
-    ClientRegistrationRepository clientRegistrationRepository(
+    public Supplier<ResponseEntity<JSONObject>> taraMetadataRequestPerformer(
             TaraConfigurationProperties taraConfigurationProperties,
             RestOperations taraRestTemplate) {
-        ClientRegistration govSsoClientRegistration =
-                createClientRegistration(REGISTRATION_ID, taraConfigurationProperties, taraRestTemplate);
-        return new InMemoryClientRegistrationRepository(List.of(govSsoClientRegistration));
+        URI issuerUri = URI.create(taraConfigurationProperties.issuerUri());
+        URI metadataUri = UriComponentsBuilder.fromUri(issuerUri)
+                .replacePath(issuerUri.getPath() + OIDC_METADATA_PATH)
+                .build(Collections.emptyMap());
+        RequestEntity<Void> request = RequestEntity.get(metadataUri).build();
+        return () -> taraRestTemplate.exchange(request, JSONObject.class);
     }
 
-    public ClientRegistration createClientRegistration(
-            String registrationId, TaraConfigurationProperties properties, RestOperations restOperations) {
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository(
+            TaraConfigurationProperties taraConfigurationProperties,
+            Supplier<ResponseEntity<JSONObject>> taraMetadataRequestPerformer) {
+        ClientRegistration clientRegistration =
+                createClientRegistration(REGISTRATION_ID, taraConfigurationProperties, taraMetadataRequestPerformer);
+        return new InMemoryClientRegistrationRepository(List.of(clientRegistration));
+    }
+
+    private static ClientRegistration createClientRegistration(
+            String registrationId,
+            TaraConfigurationProperties properties,
+            Supplier<ResponseEntity<JSONObject>> taraMetadataRequestPerformer) {
         String issuer = requireNonNull(properties.issuerUri());
-        OIDCProviderMetadata metadata = getMetadata(issuer, restOperations);
+        OIDCProviderMetadata metadata = getMetadata(issuer, taraMetadataRequestPerformer);
         return ClientRegistration.withRegistrationId(registrationId)
                 .userNameAttributeName(IdTokenClaimNames.SUB)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -60,13 +76,10 @@ public class TaraOidcConfiguration {
                 .build();
     }
 
-    private OIDCProviderMetadata getMetadata(String issuer, RestOperations govssoRestTemplate) {
-        URI issuerUri = URI.create(issuer);
-        URI metadataUri = UriComponentsBuilder.fromUri(issuerUri)
-                .replacePath(issuerUri.getPath() + OIDC_METADATA_PATH)
-                .build(Collections.emptyMap());
-        RequestEntity<Void> request = RequestEntity.get(metadataUri).build();
-        JSONObject configuration = requireNonNull(govssoRestTemplate.exchange(request, JSONObject.class).getBody());
+    private static OIDCProviderMetadata getMetadata(String issuer,
+                                             Supplier<ResponseEntity<JSONObject>> taraMetadataRequestPerformer) {
+        ResponseEntity<JSONObject> response = taraMetadataRequestPerformer.get();
+        JSONObject configuration = requireNonNull(response.getBody());
         OIDCProviderMetadata metadata = parseMetadata(configuration);
         verifyIssuer(issuer, metadata);
         return metadata;

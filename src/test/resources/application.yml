@@ -17,8 +17,12 @@ management:
       group:
         readiness:
           include:
-            - readinessState
+            - certificates
+            - diskSpace
+            - govssoSession
             - ignite
+            - readinessState
+            - tara
   endpoints:
     web:
       exposure:

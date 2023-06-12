@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.core.http.converter.OAuth2ErrorHttpMe
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,8 +25,11 @@ import java.util.stream.Stream;
 public class TaraRestTemplateConfiguration {
 
     @Bean
-    RestTemplate taraRestTemplate(TaraConfigurationProperties properties) {
-        SSLContext sslContext = createSslContext(properties);
+    @SneakyThrows
+    public RestTemplate taraRestTemplate(KeyStore taraTrustStore) {
+        SSLContext sslContext = new SSLContextBuilder()
+                .loadTrustMaterial(taraTrustStore, null)
+                .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
         @SuppressWarnings("resource")
         HttpClient httpClient = HttpClients.custom()
@@ -42,13 +47,15 @@ public class TaraRestTemplateConfiguration {
         return restTemplate;
     }
 
+    @Bean
     @SneakyThrows
-    private static SSLContext createSslContext(TaraConfigurationProperties properties) {
-        return new SSLContextBuilder()
-                .loadTrustMaterial(
-                        properties.trustStore().getURL(),
-                        properties.trustStorePassword().toCharArray())
-                .build();
+    public KeyStore taraTrustStore(TaraConfigurationProperties properties) {
+        KeyStore trustStore = KeyStore.getInstance("PKCS12");
+        char[] password = properties.trustStorePassword().toCharArray();
+        try (InputStream trustStoreFile = properties.trustStore().getInputStream()) {
+            trustStore.load(trustStoreFile, password);
+        }
+        return trustStore;
     }
 
     private static void addMessageConverters(
