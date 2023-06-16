@@ -1,0 +1,13 @@
+<html layout:decorate="~{fragments/layout}" th:lang="${#locale.language}" th:with="hideHeaderLanguageSelection=true"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<th:block layout:fragment="content" th:remove="tag" th:with="hideHeaderLanguageSelection=true">
+    <div class="alert alert-error" role="alert">
+        <p><strong><span th:remove="tag" th:text="#{message.error.auth.title}"></span></strong></p>
+        <p th:if="${message != null}" th:text="${message}"></p>
+        <p th:unless="${message != null}" th:text="#{error.technical_general}"></p>
+        <p th:if="${incident_nr != null}" th:text="#{label.error.incident-number(${incident_nr})}"></p>
+    </div>
+</th:block>
+</body>
+</html>

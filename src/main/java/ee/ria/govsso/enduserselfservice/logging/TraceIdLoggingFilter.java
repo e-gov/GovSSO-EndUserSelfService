@@ -20,7 +20,7 @@ import java.io.IOException;
 public class TraceIdLoggingFilter extends OncePerRequestFilter {
 
     private static final String MDC_ATTRIBUTE_KEY_REQUEST_TRACE_ID = "trace.id";
-    private static final String REQUEST_ATTRIBUTE_NAME_REQUEST_ID = "requestId";
+    public static final String REQUEST_ATTRIBUTE_NAME_REQUEST_ID = "requestId";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
