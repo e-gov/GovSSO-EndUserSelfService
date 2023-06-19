@@ -17,8 +17,8 @@ GovSSO end user self-service provides an overview of end user's active sessions 
     * copy-replace `GOVSSO-Session/local/tls/session/session.localhost.keystore.p12` to `src/test/resources`.
     * copy-replace `GOVSSO-Session/local/tls/tara/tara.localhost.keystore.p12` to `src/test/resources`.
 3. Add `127.0.0.1 session.localhost tara.localhost` line to `hosts` file. This is needed only for requests originating
-   from GOVSSO-EndUserSelfService when it's running locally (not in Docker Compose). It's not needed for web browsers as
-   popular browsers already have built-in support for resolving `*.localhost` subdomains.
+   from GOVSSO-EndUserSelfService when it's running locally (not in Docker Compose) or during tests. It's not needed for
+   web browsers as popular browsers already have built-in support for resolving `*.localhost` subdomains.
 4. Run
    ```shell 
    ./mvnw spring-boot:run
