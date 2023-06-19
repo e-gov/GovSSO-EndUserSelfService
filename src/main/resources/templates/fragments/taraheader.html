@@ -6,7 +6,7 @@
             </header>
             <nav th:aria-label="#{label.aria.language-selection.navigation}">
                 <ul class="c-lang-list">
-                    <th:block th:each="language: ${ {'et', 'en', 'ru'} }"><!-- TODO: languages from java -->
+                    <th:block th:each="language: ${ {'et', 'en'} }"><!-- TODO: languages from java -->
                         <li class="c-lang-list__item"  th:if="${!#strings.equalsIgnoreCase(language, #locale.language)}">
                             <a class="c-lang-list__link" th:href="|?lang=${language}|"
                                th:hreflang="${language}" th:lang="${language}"

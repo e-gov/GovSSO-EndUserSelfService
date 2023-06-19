@@ -33,7 +33,7 @@ public class WebConfiguration {
         // Setting default locale prevents CookieLocaleResolver from falling back to request.getLocale()
         resolver.setDefaultLocale(DEFAULT_LOCALE);
 
-        return new SupportedLocaleContextResolver(resolver, Set.of(ESTONIAN, ENGLISH, RUSSIAN), DEFAULT_LOCALE);
+        return new SupportedLocaleContextResolver(resolver, Set.of(ESTONIAN, ENGLISH), DEFAULT_LOCALE);
     }
 
     @Bean
