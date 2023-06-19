@@ -2,7 +2,7 @@
 
 # GovSSO End User Self-Service
 
-GovSSO end user self-service provides TODO
+GovSSO end user self-service provides an overview of end user's active sessions in Authentication service.
 
 ## Prerequisites
 
