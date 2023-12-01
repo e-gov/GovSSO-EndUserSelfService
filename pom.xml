@@ -7,7 +7,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- TODO GSSO-534 Upgrade to Spring Boot 3.x -->
-        <version>2.7.17</version>
+        <version>2.7.18</version>
         <relativePath/><!-- Lookup parent from repository. -->
     </parent>
 
@@ -32,7 +32,7 @@
         <maven.compiler.release>17</maven.compiler.release>
         <spring-boot.build-image.imageName>${project.artifactId}:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
 
-        <elastic-apm.version>1.43.0</elastic-apm.version>
+        <elastic-apm.version>1.44.0</elastic-apm.version>
         <ignite.version>2.15.0</ignite.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <logstash-logback-encoder.version>7.3</logstash-logback-encoder.version><!-- TODO Upgrade to >= 7.4 after Spring Boot is upgraded to 3.x which includes Logback >= 1.3 -->
