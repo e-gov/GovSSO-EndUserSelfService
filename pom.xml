@@ -160,6 +160,9 @@
                 <configuration>
                     <runOrder>random</runOrder>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <environmentVariables>
+                        <IGNITE_HOME>${project.build.directory}/ignite</IGNITE_HOME>
+                    </environmentVariables>
                     <argLine>
                         -DIGNITE_NO_ASCII=true
                         -DIGNITE_UPDATE_NOTIFIER=false
@@ -221,6 +224,7 @@
                 <configuration>
                     <environmentVariables>
                         <ELASTIC_APM_ENABLED>false</ELASTIC_APM_ENABLED>
+                        <IGNITE_HOME>${project.build.directory}/ignite</IGNITE_HOME>
                     </environmentVariables>
                     <jvmArguments>
                         -DIGNITE_NO_ASCII=true
@@ -250,6 +254,7 @@
                     </jvmArguments>
                     <image>
                         <env>
+                            <BPE_IGNITE_HOME>/tmp/ignite</BPE_IGNITE_HOME>
                             <BPE_DELIM_JAVA_TOOL_OPTIONS xml:space="preserve"> </BPE_DELIM_JAVA_TOOL_OPTIONS>
                             <BPE_APPEND_JAVA_TOOL_OPTIONS>
                                 -DIGNITE_NO_ASCII=true
