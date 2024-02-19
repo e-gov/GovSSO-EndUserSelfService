@@ -10,14 +10,14 @@ GovSSO end user self-service provides an overview of end user's active sessions 
 
 ## Building and Running Locally
 
-1. Follow [GOVSSO-Session/README.md](https://github.com/e-gov/GOVSSO-Session/blob/master/README.md) to run dependent
+1. Follow [GovSSO-Session/README.md](https://github.com/e-gov/GovSSO-Session/blob/master/README.md) to run dependent
    services.
-2. If you have generated new TLS certificates (doable at project GOVSSO-Session) after the last copy, then:
-    * copy-replace `GOVSSO-Session/local/tls/enduserselfservice/*.p12` files to `src/main/resources`;
-    * copy-replace `GOVSSO-Session/local/tls/session/session.localhost.keystore.p12` to `src/test/resources`.
-    * copy-replace `GOVSSO-Session/local/tls/tara/tara.localhost.keystore.p12` to `src/test/resources`.
+2. If you have generated new TLS certificates (doable at project GovSSO-Session) after the last copy, then:
+    * copy-replace `GovSSO-Session/local/tls/enduserselfservice/*.p12` files to `src/main/resources`;
+    * copy-replace `GovSSO-Session/local/tls/session/session.localhost.keystore.p12` to `src/test/resources`.
+    * copy-replace `GovSSO-Session/local/tls/tara/tara.localhost.keystore.p12` to `src/test/resources`.
 3. Add `127.0.0.1 session.localhost tara.localhost` line to `hosts` file. This is needed only for requests originating
-   from GOVSSO-EndUserSelfService when it's running locally (not in Docker Compose) or during tests. It's not needed for
+   from GovSSO-EndUserSelfService when it's running locally (not in Docker Compose) or during tests. It's not needed for
    web browsers as popular browsers already have built-in support for resolving `*.localhost` subdomains.
 4. Run
    ```shell 
@@ -42,7 +42,7 @@ GovSSO end user self-service provides an overview of end user's active sessions 
                  mvn spring-boot:build-image
       ```
       Git Bash users on Windows should add `MSYS_NO_PATHCONV=1` in front of the command.
-2. Follow GOVSSO-Session/README.md to run GOVSSO-EndUserSelfService and dependent services inside Docker Compose
+2. Follow GovSSO-Session/README.md to run GovSSO-EndUserSelfService and dependent services inside Docker Compose
 
 ## Endpoints
 
@@ -84,6 +84,7 @@ GovSSO end user self-service provides an overview of end user's active sessions 
 | `ignite.ssl-context-factory.trust-store-password` | Yes | Trust-store password. | `changeit` |
 
 ### Time
+
 | Parameter | Mandatory | Description | Example |
 | :-------- | :-------- | :---------- | :------ |
 | `govsso-enduserselfservice.time.local-zone` | No | Time zone to be used by the application. Must be valid Java `ZoneId` value. Defaults to system default. | `Europe/Tallinn` | 
