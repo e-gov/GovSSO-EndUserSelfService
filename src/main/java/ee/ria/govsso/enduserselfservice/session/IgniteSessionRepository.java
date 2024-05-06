@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.session.MapSession;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
+import org.springframework.session.UuidSessionIdGenerator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
@@ -61,6 +62,11 @@ public class IgniteSessionRepository implements SessionRepository<Session> {
                 deleteById(id);
                 return null;
             } else {
+                /*
+                 * Provide sessionIdGenerator in order for changeSessionId() to work for cached sessions.
+                 * Since the sessionIdGenerator field is transient, it can not be serialized and therefore it is null after deserialization.
+                 */
+                session.setSessionIdGenerator(UuidSessionIdGenerator.getInstance());
                 return session;
             }
         } else {

@@ -1,6 +1,8 @@
 package ee.ria.govsso.enduserselfservice.error;
 
 import ee.ria.govsso.enduserselfservice.util.ExceptionUtil;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.MethodNotAllowedException;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
 
 import static net.logstash.logback.argument.StructuredArguments.value;
 

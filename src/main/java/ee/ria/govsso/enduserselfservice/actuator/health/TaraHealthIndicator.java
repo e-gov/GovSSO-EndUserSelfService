@@ -8,6 +8,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -27,14 +28,14 @@ public class TaraHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        HttpStatus httpStatus = checkStatus();
+        HttpStatusCode httpStatus = checkStatus();
         return httpStatus != null && httpStatus.is2xxSuccessful()
                 ? Health.up().build()
                 : Health.down().build();
     }
 
     @SneakyThrows
-    private HttpStatus checkStatus() {
+    private HttpStatusCode checkStatus() {
         try {
             return taraMetadataRequestPerformer.get().getStatusCode();
         } catch (HttpStatusCodeException e) {

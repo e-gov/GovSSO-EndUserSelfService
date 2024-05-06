@@ -1,10 +1,11 @@
 package ee.ria.govsso.enduserselfservice.configuration.tara;
 
 import lombok.SneakyThrows;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,8 +34,10 @@ public class TaraRestTemplateConfiguration {
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
         @SuppressWarnings("resource")
         HttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(socketFactory)
-                .build();
+          .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create()
+            .setSSLSocketFactory(socketFactory)
+            .build())
+          .build();
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .requestFactory(() -> new HttpComponentsClientHttpRequestFactory(httpClient))
                 .build();

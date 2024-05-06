@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -27,14 +28,14 @@ public class GovssoSessionHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        HttpStatus httpStatus = checkStatus();
+        HttpStatusCode httpStatus = checkStatus();
         return httpStatus != null && httpStatus.is2xxSuccessful()
                 ? Health.up().build()
                 : Health.down().build();
     }
 
     @SneakyThrows
-    private HttpStatus checkStatus() {
+    private HttpStatusCode checkStatus() {
         try {
             return webclient
                     .get()
