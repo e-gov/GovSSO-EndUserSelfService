@@ -13,8 +13,6 @@
     <groupId>ee.ria.govsso</groupId>
     <artifactId>govsso-enduserselfservice</artifactId>
     <version>0.4.6</version>
-    <!-- Support servlet container as described in https://docs.spring.io/spring-boot/docs/2.7.x/reference/htmlsingle/#howto.traditional-deployment.war -->
-    <packaging>war</packaging>
 
     <name>GovSSO End User Self-Service</name>
     <licenses>
