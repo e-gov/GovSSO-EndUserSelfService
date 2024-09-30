@@ -35,6 +35,9 @@ management:
     os:
       enabled: true
 
+server:
+  forward-headers-strategy: NATIVE
+
 spring:
   application:
     name: govsso-enduserselfservice
