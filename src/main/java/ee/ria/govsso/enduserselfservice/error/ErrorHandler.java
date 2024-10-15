@@ -3,6 +3,7 @@ package ee.ria.govsso.enduserselfservice.error;
 import ee.ria.govsso.enduserselfservice.util.ExceptionUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.MethodNotAllowedException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
 import static net.logstash.logback.argument.StructuredArguments.value;
@@ -36,6 +39,11 @@ public class ErrorHandler {
     @ExceptionHandler({ApplicationException.class})
     public void handleApplicationException(ApplicationException e, HttpServletResponse response) {
         handleException(e, response, e.getErrorCode());
+    }
+
+    @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
+    public void handleNoResourceException(HttpServletResponse response) throws IOException {
+        response.sendError(ErrorCode.USER_INVALID_RESOURCE.getHttpStatusCode());
     }
 
     @ExceptionHandler({Exception.class})

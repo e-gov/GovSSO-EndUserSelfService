@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,5 +48,16 @@ class InfoEndpointTest extends BaseTest {
         OffsetDateTime serveCurrentTime = OffsetDateTime.parse(serviceStartTimeStr);
         assertTrue(serveCurrentTime.isBefore(now));
         assertTrue(serveCurrentTime.isAfter(now.minus(Duration.ofMinutes(1))));
+    }
+
+    @Test
+    void nonExistingEndpoint_ReturnsHttp404() {
+        given()
+            .when()
+            .get("/non-existing-endpoint")
+            .then()
+            .assertThat()
+            .statusCode(404)
+            .body("error", equalTo("USER_INPUT"));
     }
 }

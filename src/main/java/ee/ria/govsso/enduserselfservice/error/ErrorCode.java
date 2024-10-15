@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 
     USER_INPUT(400, false),
+    USER_INVALID_RESOURCE(404, false),
     TECHNICAL_GENERAL(500, true);
 
     private final int httpStatusCode;
