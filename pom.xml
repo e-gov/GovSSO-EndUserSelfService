@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.3.6</version>
         <relativePath/><!-- Lookup parent from repository. -->
     </parent>
 
@@ -29,12 +29,12 @@
         <maven.compiler.release>17</maven.compiler.release>
         <spring-boot.build-image.imageName>${project.artifactId}:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
 
-        <elastic-apm.version>1.52.0</elastic-apm.version>
+        <elastic-apm.version>1.52.1</elastic-apm.version>
         <ignite.version>2.16.0</ignite.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <jquery.version>3.7.1</jquery.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
-        <wiremock.version>3.9.1</wiremock.version>
+        <wiremock.version>3.9.2</wiremock.version>
     </properties>
 
     <dependencies><!-- Ordered by scope, groupId, artifactId. -->
