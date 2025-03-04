@@ -47,7 +47,7 @@ class ApplicationHealthEndpointTest extends HealthEndpointTest {
                 .body("status", equalTo("DOWN"))
                 .body("components.keySet()", equalTo(
                         Set.of("certificates", "diskSpace", "govssoSession", "ignite", "livenessState", "ping",
-                                "readinessState", "tara")))
+                                "readinessState", "tara", "ssl")))
                 .body("components.diskSpace.status", equalTo("UP"))
                 .body("components.govssoSession.status", equalTo("DOWN"))
                 .body("components.ignite.status", equalTo("UP"))
@@ -55,6 +55,7 @@ class ApplicationHealthEndpointTest extends HealthEndpointTest {
                 .body("components.ping.status", equalTo("UP"))
                 .body("components.readinessState.status", equalTo("UP"))
                 .body("components.tara.status", equalTo("UP"))
+                .body("components.ssl.status", equalTo("UP"))
                 .body("groups", equalTo(List.of("liveness", "readiness")));
 
         assertCertificatesHealthUp(response, "components.certificates.");
@@ -74,7 +75,7 @@ class ApplicationHealthEndpointTest extends HealthEndpointTest {
                 .body("status", equalTo("DOWN"))
                 .body("components.keySet()", equalTo(
                         Set.of("certificates", "diskSpace", "govssoSession", "ignite", "livenessState", "ping",
-                                "readinessState", "tara")))
+                                "readinessState", "tara", "ssl")))
                 .body("components.diskSpace.status", equalTo("UP"))
                 .body("components.govssoSession.status", equalTo("UP"))
                 .body("components.ignite.status", equalTo("UP"))
@@ -82,6 +83,7 @@ class ApplicationHealthEndpointTest extends HealthEndpointTest {
                 .body("components.ping.status", equalTo("UP"))
                 .body("components.readinessState.status", equalTo("UP"))
                 .body("components.tara.status", equalTo("DOWN"))
+                .body("components.ssl.status", equalTo("UP"))
                 .body("groups", equalTo(List.of("liveness", "readiness")));
 
         assertCertificatesHealthUp(response, "components.certificates.");
