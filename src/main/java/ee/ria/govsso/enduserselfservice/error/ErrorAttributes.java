@@ -14,6 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class ErrorAttributes extends DefaultErrorAttributes {
     public static final String ERROR_ATTR_MESSAGE = "message";
     public static final String ERROR_ATTR_ERROR_CODE = "error";
     public static final String ERROR_ATTR_INCIDENT_NR = "incident_nr";
+    public static final String ERROR_ATTR_TIMESTAMP = "timestamp";
 
     private final MessageSource messageSource;
 
@@ -56,6 +58,7 @@ public class ErrorAttributes extends DefaultErrorAttributes {
         attr.put(ERROR_ATTR_MESSAGE, message);
         attr.put(ERROR_ATTR_INCIDENT_NR, incidentNumber);
         attr.put(ERROR_ATTR_ERROR_CODE, errorCode.name());
+        attr.put(ERROR_ATTR_TIMESTAMP, LocalDateTime.now());
         return attr;
     }
 
