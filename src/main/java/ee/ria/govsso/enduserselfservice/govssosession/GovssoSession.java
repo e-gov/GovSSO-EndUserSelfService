@@ -15,6 +15,8 @@ public record GovssoSession(
          OffsetDateTime authenticatedAt,
          List<String> ipAddresses,
          String userAgent,
+         String os,
+         String browser,
          List<Service> services
 ) {
 

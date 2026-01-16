@@ -77,6 +77,8 @@ public class GovssoSessionService {
                 withLocalTimeZone(session.authenticatedAt()),
                 session.ipAddresses(),
                 session.userAgent(),
+                session.os(),
+                session.browser(),
                 session.services()
                         .stream()
                         .map(this::withLocalTimezone)

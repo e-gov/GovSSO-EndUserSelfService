@@ -20,12 +20,21 @@
                 </a>
                 <div class="active-sessions__session-data">
                     <div class="active-sessions__session-primary-data">
-                        <div translate="no" th:text="${govssoSession.sessionId}"/>
-                        <div th:with="servicesCount=${#lists.size(govssoSession.services)}">
-                             <th:block th:if="${servicesCount} == 1"
-                                       th:text="#{label.active-sessions.services-count.singular}"/>
-                             <th:block th:unless="${servicesCount} == 1"
-                                       th:text="#{label.active-sessions.services-count.plural(${servicesCount})}"/>
+                        <div translate="no">
+                            <span th:if="${govssoSession.os != null}"
+                                  th:text="${govssoSession.os}"></span>
+                        </div>
+                        <div translate="no" th:text="${govssoSession.sessionId}"></div>
+                        <div>
+                            <span translate="no"
+                                  th:if="${govssoSession.browser != null}"
+                                  th:text="${govssoSession.browser + ', '}"></span>
+                            <span th:with="servicesCount=${#lists.size(govssoSession.services)}">
+                                <th:block th:if="${servicesCount} == 1"
+                                          th:text="#{label.active-sessions.services-count.singular}"/>
+                                <th:block th:unless="${servicesCount} == 1"
+                                          th:text="#{label.active-sessions.services-count.plural(${servicesCount})}"/>
+                            </span>
                         </div>
                         <!-- TODO: Display delta instead of date-time -->
                         <div th:text="#{label.active-sessions.session-start-time(${#prettyDates.dateTime(govssoSession.authenticatedAt)})}"/>
