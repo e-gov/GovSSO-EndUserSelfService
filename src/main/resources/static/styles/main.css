@@ -1135,3 +1135,49 @@ button.link:hover{
 .active-sessions__session:not(.active-sessions__session--expanded) .active-sessions__session-secondary-data {
 	display: none;
 }
+.active-sessions__session-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 1.5rem;
+}
+.active-sessions__session-flag {
+    width: 1.25rem;
+    height: 0.9rem;
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+.active-sessions__session-location-text {
+    white-space: nowrap;
+}
+
+.device-info,
+.browser-info {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 100px;
+}
+
+.device-info__icon,
+.browser-info__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.browser-and-services {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    min-width: 200px;
+    flex-shrink: 0;
+}
+
+.active-sessions__session-primary-data > div {
+    display: inline-flex;
+    align-items: center;
+}

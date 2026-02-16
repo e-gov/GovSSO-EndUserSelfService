@@ -20,15 +20,38 @@
                 </a>
                 <div class="active-sessions__session-data">
                     <div class="active-sessions__session-primary-data">
-                        <div translate="no">
+                        <div class="active-sessions__session-location" translate="no"
+                            th:if="${govssoSession.ipCountry != null}">
+                            <img class="active-sessions__session-flag" alt="" loading="lazy"/>
+                            <span
+                                    class="active-sessions__session-location-text"
+                                    th:if="${govssoSession.ipCountry != null}"
+                                    th:attr="data-country-code=${govssoSession.ipCountry}">
+                             </span>
+                        </div>
+                        <div class="device-info" translate="no">
+                            <img th:if="${govssoSession.os != null}"
+                                 th:attr="data-os=${govssoSession.os}"
+                                 class="device-info__icon js-os-icon"
+                                 alt=""/>
+
                             <span th:if="${govssoSession.os != null}"
                                   th:text="${govssoSession.os}"></span>
+
+                            <span th:if="${govssoSession.os == null}"
+                                  th:text="#{label.active-sessions.other-device-type}"></span>
                         </div>
                         <div translate="no" th:text="${govssoSession.sessionId}"></div>
-                        <div>
-                            <span translate="no"
+                        <div class="browser-and-services" translate="no">
+                            <span class="browser-info"
                                   th:if="${govssoSession.browser != null}"
                                   th:text="${govssoSession.browser + ', '}"></span>
+
+                            <img th:if="${govssoSession.browser != null}"
+                                 th:attr="data-browser=${govssoSession.browser}"
+                                 class="browser-info__icon js-browser-icon"
+                                 alt=""/>
+                            </span>
                             <span th:with="servicesCount=${#lists.size(govssoSession.services)}">
                                 <th:block th:if="${servicesCount} == 1"
                                           th:text="#{label.active-sessions.services-count.singular}"/>
@@ -75,6 +98,8 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/scripts/country-display.js}"></script>
+    <script th:src="@{/scripts/device-and-browser-icons.js}"></script>
 </th:block>
 </body>
 </html>
