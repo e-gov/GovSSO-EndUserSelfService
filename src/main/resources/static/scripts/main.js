@@ -64,3 +64,114 @@ $('[data-function="logout"]').on('click', event => {
 	event.preventDefault();
 	performLogout();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+	const locale = document.documentElement.lang || 'et';
+
+	const hasDisplayNames = window.Intl && Intl.DisplayNames;
+	const regionNames = hasDisplayNames
+		? new Intl.DisplayNames([locale], {type: 'region'})
+		: null;
+
+	const activeSessionsEl = document.querySelector('.active-sessions');
+	const unknownCountry = activeSessionsEl?.dataset.unknownCountry || '';
+
+	function isValidCountryCode(code) {
+    	return /^[A-Za-z]{2}$/.test(code);
+    }
+
+	document
+		.querySelectorAll('.active-sessions__session-location-text')
+		.forEach(locationTextEl => {
+			const code = locationTextEl.dataset.countryCode;
+			const flagEl = locationTextEl
+				.closest('.active-sessions__session-location')
+				?.querySelector('.active-sessions__session-flag');
+
+			if (!code || code.trim() === '') {
+				locationTextEl.textContent = unknownCountry;
+				if (flagEl) {
+					flagEl.remove();
+				}
+				return;
+			}
+
+			let countryName = code;
+
+            if (regionNames && isValidCountryCode(code)) {
+                countryName = regionNames.of(code) || code;
+            }
+
+            locationTextEl.textContent = countryName;
+
+			if (flagEl) {
+				flagEl.src = `/webjars/flag-icons/flags/4x3/${code.toLowerCase()}.svg`;
+				flagEl.alt = '';
+			}
+		});
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // https://github.com/ua-parser/uap-core/blob/master/regexes.yaml
+	const OS_ICONS = [
+        {match: "windows", icon: "windows.svg"},
+
+        {match: "mac", icon: "apple.svg"},
+        {match: "ios", icon: "apple.svg"},
+        {match: "atv os x", icon: "apple.svg"},
+        {match: "watchos", icon: "apple.svg"},
+        {match: "tvos", icon: "apple.svg"},
+
+        {match: "android", icon: "android.svg"},
+
+        {match: "linux", icon: "linux.svg"},
+        {match: "debian", icon: "linux.svg"},
+        {match: "gentoo", icon: "linux.svg"},
+        {match: "chrome os", icon: "linux.svg"},
+        {match: "firefox os", icon: "linux.svg"},
+        {match: "kaios", icon: "linux.svg"},
+        {match: "red hat", icon: "linux.svg"}
+    ];
+
+    // https://github.com/ua-parser/uap-core/blob/master/regexes.yaml
+	const BROWSER_ICONS = [
+		{match: "chrome", icon: "chrome.svg"},
+		{match: "edge", icon: "edge.svg"},
+		{match: "firefox", icon: "firefox.svg"},
+		{match: "opera", icon: "opera.svg"},
+		{match: "safari", icon: "safari.svg"},
+		{match: "samsung", icon: "samsung-internet.svg"}
+	];
+
+	function resolveIcon(value, icons) {
+		if (!value) {
+			return null;
+		}
+
+		const normalized = value.toLowerCase();
+
+		const match = icons.find(entry =>
+			normalized.includes(entry.match)
+		);
+
+		return match ? match.icon : null;
+	}
+
+	document.querySelectorAll("[data-os]").forEach(img => {
+		const os = img.dataset.os;
+		const icon = resolveIcon(os, OS_ICONS);
+
+		if (icon) {
+			img.src = "/devices/" + icon;
+		}
+	});
+
+	document.querySelectorAll("[data-browser]").forEach(img => {
+		const browser = img.dataset.browser;
+		const icon = resolveIcon(browser, BROWSER_ICONS);
+
+		if (icon) {
+			img.src = "/browsers/" + icon;
+		}
+	});
+});

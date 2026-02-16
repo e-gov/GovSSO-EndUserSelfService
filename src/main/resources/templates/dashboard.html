@@ -2,7 +2,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block layout:fragment="content" th:remove="tag">
-    <div class="active-sessions">
+    <div class="active-sessions"
+        th:attr="data-unknown-country=#{label.active-sessions.unknown-country}">
         <div class="active-sessions__header">
             <h2 class="active-sessions__title" th:text="#{label.active-sessions.title}"/>
             <!-- TODO: active-sessions__info-button -->
@@ -20,15 +21,41 @@
                 </a>
                 <div class="active-sessions__session-data">
                     <div class="active-sessions__session-primary-data">
-                        <div translate="no">
+                        <th:block th:if="${!#lists.isEmpty(govssoSession.ipInfos)}">
+                            <th:block th:with="country=${govssoSession.ipInfos.get(0).country}">
+                            <div class="active-sessions__session-location" translate="no"
+                                 th:if="${country != null}">
+                                <img class="active-sessions__session-flag" alt="" loading="lazy"
+                                     th:if="${!#strings.isEmpty(country)}"/>
+                                <span
+                                    class="active-sessions__session-location-text"
+                                    th:attr="data-country-code=${country}">
+                                </span>
+                            </div>
+                            </th:block>
+                        </th:block>
+                        <div class="active-sessions__device-info" translate="no">
+                            <img th:if="${govssoSession.os != null}"
+                                 th:attr="data-os=${govssoSession.os}"
+                                 class="active-sessions__device-icon"
+                                 alt=""/>
+
                             <span th:if="${govssoSession.os != null}"
                                   th:text="${govssoSession.os}"></span>
+
+                            <span th:if="${govssoSession.os == null}"
+                                  th:text="#{label.active-sessions.other-device-type}"></span>
                         </div>
                         <div translate="no" th:text="${govssoSession.sessionId}"></div>
-                        <div>
-                            <span translate="no"
+                        <div class="active-sessions__browser-and-services" translate="no">
+                            <span class="active-sessions__device-icon"
                                   th:if="${govssoSession.browser != null}"
                                   th:text="${govssoSession.browser + ', '}"></span>
+
+                            <img th:if="${govssoSession.browser != null}"
+                                 th:attr="data-browser=${govssoSession.browser}"
+                                 class="active-sessions__browser-icon"
+                                 alt=""/>
                             <span th:with="servicesCount=${#lists.size(govssoSession.services)}">
                                 <th:block th:if="${servicesCount} == 1"
                                           th:text="#{label.active-sessions.services-count.singular}"/>
@@ -48,10 +75,11 @@
                     </div>
                     <div class="active-sessions__session-secondary-data">
                         <div class="active-sessions__session-secondary-data-left">
-                            <p th:with="ipCount=${#lists.size(govssoSession.ipAddresses)}">
+                            <p th:with="ipCount=${#lists.size(govssoSession.ipInfos)}">
                                 <th:block th:if="${ipCount} == 1" th:text="#{label.active-sessions.ip.singular}"/>
                                 <th:block th:unless="${ipCount} == 1" th:text="#{label.active-sessions.ip.plural}"/>
-                                <span translate="no" th:text="${#strings.listJoin(govssoSession.ipAddresses, ', ')}"/>
+                                <span translate="no"
+                                      th:text="${#strings.listJoin(govssoSession.ipInfos.![ipAddress], ', ')}"/>
                             </p>
                             <p>
                                 <th:block th:text="#{label.active-sessions.session-id}"/>
