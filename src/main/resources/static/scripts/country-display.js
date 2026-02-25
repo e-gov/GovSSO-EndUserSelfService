@@ -1,4 +1,3 @@
-console.log('country-display.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
     const locale = document.documentElement.lang || 'et';
 
@@ -19,22 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const normalizedCode = code.toLowerCase();
-
-            // 1️⃣ Localized country name
             const countryName = regionNames.of(code);
             if (countryName) {
                 locationTextEl.textContent = countryName;
             }
 
-            // 2️⃣ Flag SVG (local asset)
-            const flagImg = locationTextEl
+            const flagEl = locationTextEl
                 .closest('.active-sessions__session-location')
                 ?.querySelector('.active-sessions__session-flag');
 
-            if (flagImg) {
-                flagImg.src = `/flags/4x3/${normalizedCode}.svg`;
-                flagImg.alt = countryName || code;
+            if (flagEl) {
+                flagEl.src = `/flags/4x3/${code.toLowerCase()}.svg`;
+                flagEl.alt = "";
             }
         });
 });

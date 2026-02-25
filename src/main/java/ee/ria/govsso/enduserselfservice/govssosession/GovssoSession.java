@@ -13,8 +13,7 @@ import java.util.Map;
 public record GovssoSession(
          String sessionId,
          OffsetDateTime authenticatedAt,
-         List<String> ipAddresses,
-         String ipCountry,
+         List<GovssoSessionIpInfo> ipAddresses,
          String userAgent,
          String os,
          String browser,

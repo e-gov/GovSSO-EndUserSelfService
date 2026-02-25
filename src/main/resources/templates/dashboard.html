@@ -21,12 +21,14 @@
                 <div class="active-sessions__session-data">
                     <div class="active-sessions__session-primary-data">
                         <div class="active-sessions__session-location" translate="no"
-                            th:if="${govssoSession.ipCountry != null}">
+                             th:if="${!#lists.isEmpty(govssoSession.ipAddresses)
+                                    and govssoSession.ipAddresses.get(0).country != null}">
                             <img class="active-sessions__session-flag" alt="" loading="lazy"/>
                             <span
                                     class="active-sessions__session-location-text"
-                                    th:if="${govssoSession.ipCountry != null}"
-                                    th:attr="data-country-code=${govssoSession.ipCountry}">
+                                    th:if="${govssoSession.ipAddresses.get(0).country != null}"
+                                    th:text="${govssoSession.ipAddresses.get(0).country}"
+                                    th:attr="data-country-code=${govssoSession.ipAddresses.get(0).country}">
                              </span>
                         </div>
                         <div class="device-info" translate="no">
@@ -74,7 +76,8 @@
                             <p th:with="ipCount=${#lists.size(govssoSession.ipAddresses)}">
                                 <th:block th:if="${ipCount} == 1" th:text="#{label.active-sessions.ip.singular}"/>
                                 <th:block th:unless="${ipCount} == 1" th:text="#{label.active-sessions.ip.plural}"/>
-                                <span translate="no" th:text="${#strings.listJoin(govssoSession.ipAddresses, ', ')}"/>
+                                <span translate="no"
+                                      th:text="${#strings.listJoin(govssoSession.ipAddresses.![ipAddress], ', ')}"/>
                             </p>
                             <p>
                                 <th:block th:text="#{label.active-sessions.session-id}"/>

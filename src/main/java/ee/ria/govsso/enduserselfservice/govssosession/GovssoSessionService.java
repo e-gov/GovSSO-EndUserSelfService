@@ -76,7 +76,6 @@ public class GovssoSessionService {
                 session.sessionId(),
                 withLocalTimeZone(session.authenticatedAt()),
                 session.ipAddresses(),
-                session.ipCountry(),
                 session.userAgent(),
                 session.os(),
                 session.browser(),

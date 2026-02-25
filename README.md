@@ -92,3 +92,6 @@ GovSSO end user self-service provides an overview of end user's active sessions 
 ## Non-pom.xml Licenses
 
 * [Maven Wrapper](https://maven.apache.org/wrapper/) - Apache 2.0 license
+* [Flag Icons](https://github.com/lipis/flag-icons) - MIT License. Selected SVG files copied without modifications.
+* [Devicon](https://github.com/devicons/devicon) - MIT License. Selected SVG files copied without modifications.
+* [Microsoft Edge logo (2019)](https://commons.wikimedia.org/wiki/File:Microsoft_Edge_logo_(2019).svg) - MIT License (Expat). Copyright © Microsoft Corporation. SVG file copied without modifications.

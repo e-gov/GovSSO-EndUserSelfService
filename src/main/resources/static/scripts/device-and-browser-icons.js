@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const OS_MAP = [
+    const OS_ICONS = [
         { match: "windows", icon: "windows.svg" },
         { match: "mac", icon: "apple.svg" },
         { match: "ios", icon: "apple.svg" },
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { match: "android", icon: "android.svg" }
     ];
 
-    const BROWSER_MAP = [
+    const BROWSER_ICONS = [
         { match: "chrome", icon: "chrome.svg" },
         { match: "edge", icon: "edge.svg" },
         { match: "firefox", icon: "firefox.svg" },
@@ -16,14 +16,14 @@ document.addEventListener("DOMContentLoaded", function () {
         { match: "safari", icon: "safari.svg" }
     ];
 
-    function resolveIcon(value, map) {
+    function resolveIcon(value, icons) {
         if (!value) {
             return null;
         }
 
         const normalized = value.toLowerCase();
 
-        const match = map.find(entry =>
+        const match = icons.find(entry =>
             normalized.includes(entry.match)
         );
 
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".js-os-icon").forEach(img => {
         const os = img.dataset.os;
-        const icon = resolveIcon(os, OS_MAP);
+        const icon = resolveIcon(os, OS_ICONS);
 
         if (icon) {
             img.src = "/devices/" + icon;
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".js-browser-icon").forEach(img => {
         const browser = img.dataset.browser;
-        const icon = resolveIcon(browser, BROWSER_MAP);
+        const icon = resolveIcon(browser, BROWSER_ICONS);
 
         if (icon) {
             img.src = "/browsers/" + icon;
