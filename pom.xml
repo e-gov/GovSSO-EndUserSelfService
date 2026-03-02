@@ -31,6 +31,7 @@
         <githubMirror>https://github.com</githubMirror>
 
         <elastic-apm.version>1.55.1</elastic-apm.version>
+        <flag-icons.version>7.5.0</flag-icons.version>
         <ignite.version>2.17.0</ignite.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <jquery.version>3.7.1</jquery.version>
@@ -137,9 +138,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>flag-icons</artifactId>
+            <version>${flag-icons.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
         </dependency>
     </dependencies>
 

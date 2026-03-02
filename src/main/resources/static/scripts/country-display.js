@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ?.querySelector('.active-sessions__session-flag');
 
             if (flagEl) {
-                flagEl.src = `/flags/4x3/${code.toLowerCase()}.svg`;
+                flagEl.src = `/webjars/flag-icons/flags/4x3/${code.toLowerCase()}.svg`;
                 flagEl.alt = "";
             }
         });
