@@ -20,18 +20,20 @@
                 </a>
                 <div class="active-sessions__session-data">
                     <div class="active-sessions__session-primary-data">
-                        <div class="active-sessions__session-location" translate="no"
-                             th:if="${!#lists.isEmpty(govssoSession.ipAddresses)
-                                    and govssoSession.ipAddresses.get(0).country != null}">
-                            <img class="active-sessions__session-flag" alt="" loading="lazy"
-                                 th:if="${govssoSession.ipAddresses.get(0).country != null and !#strings.isEmpty(govssoSession.ipAddresses.get(0).country)}"/>
-                            <span
-                                class="active-sessions__session-location-text"
-                                th:attr="
-                                    data-country-code=${govssoSession.ipAddresses.get(0).country},
-                                    data-unknown-country=#{label.active-sessions.unknown-country}">
-                             </span>
-                        </div>
+                        <th:block th:if="${!#lists.isEmpty(govssoSession.ipAddresses)}"
+                                  th:with="country=${govssoSession.ipAddresses.get(0).country}">
+                            <div class="active-sessions__session-location" translate="no"
+                                 th:if="${country != null}">
+                                <img class="active-sessions__session-flag" alt="" loading="lazy"
+                                     th:if="${!#strings.isEmpty(country)}"/>
+                                <span
+                                    class="active-sessions__session-location-text"
+                                    th:attr="
+                                        data-country-code=${country},
+                                        data-unknown-country=#{label.active-sessions.unknown-country}">
+                                </span>
+                            </div>
+                        </th:block>
                         <div class="device-info" translate="no">
                             <img th:if="${govssoSession.os != null}"
                                  th:attr="data-os=${govssoSession.os}"
