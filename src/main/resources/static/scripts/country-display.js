@@ -32,11 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (flagEl) {
                     flagEl.src = `/webjars/flag-icons/flags/4x3/${code.toLowerCase()}.svg`;
                     flagEl.alt = "";
-                }
-            } else {
-                locationTextEl.textContent = code;
-                if (flagEl) {
-                    flagEl.remove();
+                    flagEl.style.visibility = "visible";
                 }
             }
         });

@@ -1181,3 +1181,8 @@ button.link:hover{
     display: inline-flex;
     align-items: center;
 }
+.active-sessions__session-flag:not([src]),
+.device-info__icon:not([src]),
+.browser-info__icon:not([src]) {
+    display: none;
+}

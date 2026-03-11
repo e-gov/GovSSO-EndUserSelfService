@@ -27,7 +27,6 @@
                                  th:if="${govssoSession.ipAddresses.get(0).country != null and !#strings.isEmpty(govssoSession.ipAddresses.get(0).country)}"/>
                             <span
                                 class="active-sessions__session-location-text"
-                                th:text="${govssoSession.ipAddresses.get(0).country}"
                                 th:attr="
                                     data-country-code=${govssoSession.ipAddresses.get(0).country},
                                     data-unknown-country=#{label.active-sessions.unknown-country}">
