@@ -23,12 +23,14 @@
                         <div class="active-sessions__session-location" translate="no"
                              th:if="${!#lists.isEmpty(govssoSession.ipAddresses)
                                     and govssoSession.ipAddresses.get(0).country != null}">
-                            <img class="active-sessions__session-flag" alt="" loading="lazy"/>
+                            <img class="active-sessions__session-flag" alt="" loading="lazy"
+                                 th:if="${govssoSession.ipAddresses.get(0).country != null and !#strings.isEmpty(govssoSession.ipAddresses.get(0).country)}"/>
                             <span
-                                    class="active-sessions__session-location-text"
-                                    th:if="${govssoSession.ipAddresses.get(0).country != null}"
-                                    th:text="${govssoSession.ipAddresses.get(0).country}"
-                                    th:attr="data-country-code=${govssoSession.ipAddresses.get(0).country}">
+                                class="active-sessions__session-location-text"
+                                th:text="${govssoSession.ipAddresses.get(0).country}"
+                                th:attr="
+                                    data-country-code=${govssoSession.ipAddresses.get(0).country},
+                                    data-unknown-country=#{label.active-sessions.unknown-country}">
                              </span>
                         </div>
                         <div class="device-info" translate="no">

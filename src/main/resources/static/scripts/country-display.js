@@ -11,25 +11,33 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     document
-        .querySelectorAll('[data-country-code]')
+        .querySelectorAll('.active-sessions__session-location-text')
         .forEach(locationTextEl => {
             const code = locationTextEl.dataset.countryCode;
-            if (!code) {
+            const unknownCountry = locationTextEl.dataset.unknownCountry;
+            const flagEl = locationTextEl
+                .closest('.active-sessions__session-location')
+                ?.querySelector('.active-sessions__session-flag');
+            if (!code || code.trim() === "") {
+                locationTextEl.textContent = unknownCountry;
+                if (flagEl) {
+                    flagEl.remove();
+                }
                 return;
             }
 
             const countryName = regionNames.of(code);
             if (countryName) {
                 locationTextEl.textContent = countryName;
-            }
-
-            const flagEl = locationTextEl
-                .closest('.active-sessions__session-location')
-                ?.querySelector('.active-sessions__session-flag');
-
-            if (flagEl) {
-                flagEl.src = `/webjars/flag-icons/flags/4x3/${code.toLowerCase()}.svg`;
-                flagEl.alt = "";
+                if (flagEl) {
+                    flagEl.src = `/webjars/flag-icons/flags/4x3/${code.toLowerCase()}.svg`;
+                    flagEl.alt = "";
+                }
+            } else {
+                locationTextEl.textContent = code;
+                if (flagEl) {
+                    flagEl.remove();
+                }
             }
         });
 });
