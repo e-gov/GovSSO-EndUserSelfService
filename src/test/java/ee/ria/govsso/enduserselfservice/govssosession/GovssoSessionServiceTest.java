@@ -78,7 +78,7 @@ class GovssoSessionServiceTest {
                 .sessionId("session-1")
                 .authenticatedAt(utcTime)
                 .ipAddresses(List.of(
-                        GovssoSessionIpInfo.builder()
+                        GovssoSession.IpAddress.builder()
                                 .ipAddress("127.0.0.1")
                                 .country("EE")
                                 .build()
@@ -103,6 +103,7 @@ class GovssoSessionServiceTest {
         assertThat(result, hasSize(1));
 
         GovssoSession session = result.get(0);
+        assertThat(session.ipAddresses().get(0).ipAddress(), equalTo("127.0.0.1"));
         assertThat(session.ipAddresses().get(0).country(), equalTo("EE"));
         assertThat(session.os(), equalTo("Windows"));
         assertThat(session.browser(), equalTo("Chrome"));

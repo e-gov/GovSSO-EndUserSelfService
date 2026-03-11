@@ -30,25 +30,21 @@ document.addEventListener("DOMContentLoaded", function () {
         return match ? match.icon : null;
     }
 
-    document.querySelectorAll(".js-os-icon").forEach(img => {
+    document.querySelectorAll("[data-os]").forEach(img => {
         const os = img.dataset.os;
         const icon = resolveIcon(os, OS_ICONS);
 
         if (icon) {
             img.src = "/devices/" + icon;
-        } else {
-            img.style.display = "none";
         }
     });
 
-    document.querySelectorAll(".js-browser-icon").forEach(img => {
+    document.querySelectorAll("[data-browser]").forEach(img => {
         const browser = img.dataset.browser;
         const icon = resolveIcon(browser, BROWSER_ICONS);
 
         if (icon) {
             img.src = "/browsers/" + icon;
-        } else {
-            img.style.display = "none";
         }
     });
 

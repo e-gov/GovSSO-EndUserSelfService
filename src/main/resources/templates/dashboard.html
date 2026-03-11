@@ -34,10 +34,10 @@
                                 </span>
                             </div>
                         </th:block>
-                        <div class="device-info" translate="no">
+                        <div class="active-sessions__device-info" translate="no">
                             <img th:if="${govssoSession.os != null}"
                                  th:attr="data-os=${govssoSession.os}"
-                                 class="device-info__icon js-os-icon"
+                                 class="active-sessions__device-icon"
                                  alt=""/>
 
                             <span th:if="${govssoSession.os != null}"
@@ -47,16 +47,15 @@
                                   th:text="#{label.active-sessions.other-device-type}"></span>
                         </div>
                         <div translate="no" th:text="${govssoSession.sessionId}"></div>
-                        <div class="browser-and-services" translate="no">
-                            <span class="browser-info"
+                        <div class="active-sessions__browser-and-services" translate="no">
+                            <span class="active-sessions__device-icon"
                                   th:if="${govssoSession.browser != null}"
                                   th:text="${govssoSession.browser + ', '}"></span>
 
                             <img th:if="${govssoSession.browser != null}"
                                  th:attr="data-browser=${govssoSession.browser}"
-                                 class="browser-info__icon js-browser-icon"
+                                 class="active-sessions__browser-icon"
                                  alt=""/>
-                            </span>
                             <span th:with="servicesCount=${#lists.size(govssoSession.services)}">
                                 <th:block th:if="${servicesCount} == 1"
                                           th:text="#{label.active-sessions.services-count.singular}"/>
