@@ -13,7 +13,7 @@ import java.util.Map;
 public record GovssoSession(
          String sessionId,
          OffsetDateTime authenticatedAt,
-         List<IpAddress> ipAddresses,
+         List<IpInfo> ipInfos,
          String userAgent,
          String os,
          String browser,
@@ -31,7 +31,7 @@ public record GovssoSession(
 
     @Jacksonized
     @Builder
-    public record IpAddress(
+    public record IpInfo(
             String ipAddress,
             String country
     ) {}
