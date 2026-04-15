@@ -1,35 +1,109 @@
 'use strict';
 
+const NOTICE_PARAM = 'sessionNotice';
+const NOTICE_SINGLE_SUCCESS = 'session-ended';
+const NOTICE_ALL_SUCCESS = 'all-sessions-ended';
+
 const FLAG_ICONS_VERSION = '7.5.0';  // Keep in sync with pom.xml flag-icons.version
 
 const endAllSessions = function () {
-	fetch(
-		'/api/sessions',
-		{
-			method: 'DELETE',
-			headers: createCsrfHeader()
-		}
-	).then(
-		() => location.reload(),
-		(err) => showError(err) // TODO
-	)
+	endSessionsRequest('/api/sessions', NOTICE_ALL_SUCCESS, 'endAllSessionsError');
 };
 
 const endSession = function (sessionId) {
-	fetch(
+	endSessionsRequest(
 		'/api/sessions/' + encodeURIComponent(sessionId),
-		{
-			method: 'DELETE',
-			headers: createCsrfHeader()
-		}
-	).then(
-		() => location.reload(),
-		(err) => showError(err) // TODO
-	)
+		NOTICE_SINGLE_SUCCESS,
+		'endSessionError'
+	);
 };
 
-const showError = function (error) {
-	console.error('Error', error);
+const endSessionsRequest = async function (url, successNotice, errorMessage) {
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: createCsrfHeader()
+		});
+
+		if (!response.ok) {
+			showError(errorMessage);
+			return;
+		}
+
+		reloadWithNotice(successNotice);
+	} catch (error) {
+		showError(errorMessage, error);
+	}
+};
+
+const getActiveSessionsMessages = function () {
+	const messagesEl = document.getElementById('active-sessions-messages');
+	if (!messagesEl) {
+		return {};
+	}
+
+	return JSON.parse(messagesEl.textContent);
+};
+
+const getActiveSessionsMessage = function (key) {
+	return getActiveSessionsMessages()[key] || null;
+};
+
+const reloadWithNotice = function (notice) {
+	const url = new URL(window.location.href);
+	url.searchParams.set(NOTICE_PARAM, notice);
+	window.location.assign(url.toString());
+};
+
+const showSuccessNoticeFromUrl = function () {
+	const url = new URL(window.location.href);
+	const notice = url.searchParams.get(NOTICE_PARAM);
+
+	if (!notice) {
+		return;
+	}
+
+	const messageKeyByNotice = {
+		[NOTICE_SINGLE_SUCCESS]: 'endSessionSuccess',
+		[NOTICE_ALL_SUCCESS]: 'endAllSessionsSuccess'
+	};
+
+	const messageKey = messageKeyByNotice[notice];
+
+	if (!messageKey) {
+		return;
+	}
+
+	showNotice(messageKey, 'success');
+
+	url.searchParams.delete(NOTICE_PARAM);
+	window.history.replaceState({}, document.title, url.toString());
+};
+
+const showError = function (messageKey, error) {
+	if (error) {
+		console.error('Error', error);
+	}
+
+	showNotice(messageKey, 'error');
+};
+
+const showNotice = function (messageKey, type) {
+	const message = getActiveSessionsMessage(messageKey);
+
+	if (!message) {
+		return;
+	}
+
+	const alertContainerEl = document.getElementById('session-alert-container');
+	if (!alertContainerEl) {
+		return;
+	}
+
+	const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+
+	alertContainerEl.className = 'active-sessions__alert-container alert ' + alertClass;
+	alertContainerEl.textContent = message;
 };
 
 const createCsrfHeader = function () {
@@ -55,7 +129,7 @@ $('[data-function="end-session"]').on('click', event => {
 
 $('[data-function="toggle-session-expansion"]').on('click', event => {
 	event.preventDefault();
-	const target = $(event.delegateTarget).closest(".active-sessions__session");
+	const target = $(event.delegateTarget).closest('.active-sessions__session');
 	$(target).toggleClass('active-sessions__session--expanded');
 	const expandCollapseIcon = $(target).find('.active-sessions__session-expand-toggle .icon');
 	$(expandCollapseIcon).toggleClass('icon-expand');
@@ -68,6 +142,8 @@ $('[data-function="logout"]').on('click', event => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+	showSuccessNoticeFromUrl();
+
 	const locale = document.documentElement.lang || 'et';
 
 	const hasDisplayNames = window.Intl && Intl.DisplayNames;
@@ -75,8 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		? new Intl.DisplayNames([locale], {type: 'region'})
 		: null;
 
-	const activeSessionsEl = document.querySelector('.active-sessions');
-	const unknownCountry = activeSessionsEl?.dataset.unknownCountry || '';
+	const unknownCountry = getActiveSessionsMessage('unknownCountry') || '';
 
 	function isValidCountryCode(code) {
     	return /^[A-Za-z]{2}$/.test(code);
