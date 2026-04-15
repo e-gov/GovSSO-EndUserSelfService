@@ -1,35 +1,128 @@
 'use strict';
 
+const NOTICE_PARAM = 'sessionNotice';
+const NOTICE_SINGLE_SUCCESS = 'session-ended';
+const NOTICE_ALL_SUCCESS = 'all-sessions-ended';
+
 const FLAG_ICONS_VERSION = '7.5.0';  // Keep in sync with pom.xml flag-icons.version
 
 const endAllSessions = function () {
-	fetch(
+	endSessionsRequest(
 		'/api/sessions',
-		{
-			method: 'DELETE',
-			headers: createCsrfHeader()
-		}
-	).then(
-		() => location.reload(),
-		(err) => showError(err) // TODO
-	)
+		NOTICE_ALL_SUCCESS,
+		getActiveSessionsMessage('endAllSessionsError')
+	);
 };
 
 const endSession = function (sessionId) {
-	fetch(
+	endSessionsRequest(
 		'/api/sessions/' + encodeURIComponent(sessionId),
-		{
-			method: 'DELETE',
-			headers: createCsrfHeader()
-		}
-	).then(
-		() => location.reload(),
-		(err) => showError(err) // TODO
-	)
+		NOTICE_SINGLE_SUCCESS,
+		getActiveSessionsMessage('endSessionError')
+	);
 };
 
-const showError = function (error) {
-	console.error('Error', error);
+const endSessionsRequest = async function (url, successNotice, errorMessage) {
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: createCsrfHeader()
+		});
+
+		if (!response.ok) {
+			showError(errorMessage);
+			return;
+		}
+
+		reloadWithNotice(successNotice);
+	} catch (error) {
+		showError(errorMessage, error);
+	}
+};
+
+const getActiveSessionsElement = function () {
+	return document.querySelector('.active-sessions');
+};
+
+const getActiveSessionsMessage = function (datasetKey) {
+	const activeSessionsEl = getActiveSessionsElement();
+	if (!activeSessionsEl) {
+		return null;
+	}
+
+	const message = activeSessionsEl.dataset[datasetKey];
+	if (!message || message.startsWith('??') || message.endsWith('??')) {
+		return null;
+	}
+
+	return message;
+};
+
+const reloadWithNotice = function (notice) {
+	const url = new URL(window.location.href);
+	url.searchParams.set(NOTICE_PARAM, notice);
+	window.location.assign(url.toString());
+};
+
+const showSuccessNoticeFromUrl = function () {
+	const url = new URL(window.location.href);
+	const notice = url.searchParams.get(NOTICE_PARAM);
+
+	if (!notice) {
+		return;
+	}
+
+	const messageByNotice = {
+		[NOTICE_SINGLE_SUCCESS]: getActiveSessionsMessage('endSessionSuccess'),
+		[NOTICE_ALL_SUCCESS]: getActiveSessionsMessage('endAllSessionsSuccess')
+	};
+
+	const message = messageByNotice[notice];
+
+	if (!message) {
+		return;
+	}
+
+	showNotice(message, 'alert alert-success');
+
+	url.searchParams.delete(NOTICE_PARAM);
+	window.history.replaceState({}, document.title, url.toString());
+};
+
+const showError = function (message, error) {
+	if (error) {
+		console.error('Error', error);
+	}
+
+	if (!message) {
+		return;
+	}
+
+	showNotice(message, 'alert alert-error');
+};
+
+const showNotice = function (message, className) {
+	const activeSessionsEl = getActiveSessionsElement();
+	if (!activeSessionsEl) {
+		return;
+	}
+
+	let noticeEl = document.querySelector('.active-sessions__notice');
+
+	if (!noticeEl) {
+		noticeEl = document.createElement('div');
+		noticeEl.className = 'active-sessions__notice';
+
+		const sessionsListEl = activeSessionsEl.querySelector('.active-sessions__list');
+		if (sessionsListEl) {
+			activeSessionsEl.insertBefore(noticeEl, sessionsListEl);
+		} else {
+			activeSessionsEl.prepend(noticeEl);
+		}
+	}
+
+	noticeEl.className = 'active-sessions__notice ' + className;
+	noticeEl.textContent = message;
 };
 
 const createCsrfHeader = function () {
@@ -55,7 +148,7 @@ $('[data-function="end-session"]').on('click', event => {
 
 $('[data-function="toggle-session-expansion"]').on('click', event => {
 	event.preventDefault();
-	const target = $(event.delegateTarget).closest(".active-sessions__session");
+	const target = $(event.delegateTarget).closest('.active-sessions__session');
 	$(target).toggleClass('active-sessions__session--expanded');
 	const expandCollapseIcon = $(target).find('.active-sessions__session-expand-toggle .icon');
 	$(expandCollapseIcon).toggleClass('icon-expand');
@@ -68,6 +161,8 @@ $('[data-function="logout"]').on('click', event => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+	showSuccessNoticeFromUrl();
+
 	const locale = document.documentElement.lang || 'et';
 
 	const hasDisplayNames = window.Intl && Intl.DisplayNames;

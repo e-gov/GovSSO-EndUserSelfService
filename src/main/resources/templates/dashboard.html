@@ -3,7 +3,12 @@
 <body>
 <th:block layout:fragment="content" th:remove="tag">
     <div class="active-sessions"
-        th:attr="data-unknown-country=#{label.active-sessions.unknown-country}">
+        th:attr="
+            data-unknown-country=#{label.active-sessions.unknown-country},
+            data-end-session-success=#{label.active-sessions.end-session-success},
+            data-end-all-sessions-success=#{label.active-sessions.end-all-sessions-success},
+            data-end-session-error=#{label.active-sessions.end-session-error},
+            data-end-all-sessions-error=#{label.active-sessions.end-all-sessions-error}">
         <div class="active-sessions__header">
             <h2 class="active-sessions__title" th:text="#{label.active-sessions.title}"/>
             <!-- TODO: active-sessions__info-button -->

@@ -1186,3 +1186,19 @@ button.link:hover{
 .active-sessions__browser-icon:not([src]) {
     display: none;
 }
+
+.alert-success {
+	background-color: #dff2bf;
+	border: 4px solid #7fbf3f;
+}
+
+@media (max-width: 800px) {
+	.alert-success {
+		border-width: 2px;
+	}
+}
+
+.active-sessions__notice {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
