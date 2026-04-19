@@ -1,5 +1,7 @@
 'use strict';
 
+const FLAG_ICONS_VERSION = '7.5.0';  // Keep in sync with pom.xml flag-icons.version
+
 const endAllSessions = function () {
 	fetch(
 		'/api/sessions',
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             locationTextEl.textContent = countryName;
 
 			if (flagEl) {
-				flagEl.src = `/webjars/flag-icons/flags/4x3/${code.toLowerCase()}.svg`;
+				flagEl.src = `/webjars/flag-icons/${FLAG_ICONS_VERSION}/flags/4x3/${code.toLowerCase()}.svg`;
 				flagEl.alt = '';
 			}
 		});
