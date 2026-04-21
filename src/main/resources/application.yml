@@ -7,6 +7,8 @@ govsso-enduserselfservice:
     tls:
       trust-store: classpath:enduserselfservice.localhost.session.truststore.p12
       trust-store-password: changeit
+  ui:
+    show-country: false
 
 management:
   endpoint:

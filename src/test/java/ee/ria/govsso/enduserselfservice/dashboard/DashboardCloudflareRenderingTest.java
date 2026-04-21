@@ -4,9 +4,12 @@ import ee.ria.govsso.enduserselfservice.BaseTest;
 import ee.ria.govsso.enduserselfservice.govssosession.GovssoSession;
 import ee.ria.govsso.enduserselfservice.govssosession.GovssoSessionService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
+@TestPropertySource(properties = "govsso-enduserselfservice.ui.show-country=true")
 class DashboardCloudflareRenderingTest extends BaseTest {
 
     public static final String SUBJECT_SESSION = "test1234";
@@ -51,10 +55,11 @@ class DashboardCloudflareRenderingTest extends BaseTest {
                 .andExpect(content().string(containsString("00000000-0000-0000-0000-111111111111")));
     }
 
-    @Test
-    void index_whenCountryIsEmpty_rendersLocationWithoutFlag() throws Exception {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void index_whenCountryIsMissing_rendersLocationWithoutFlag(String country) throws Exception {
         when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
-                .thenReturn(List.of(sessionWithCountry("")));
+                .thenReturn(List.of(sessionWithCountry(country)));
 
         mockMvc.perform(get("/").with(oidcUser()))
                 .andExpect(status().isOk())
@@ -62,18 +67,6 @@ class DashboardCloudflareRenderingTest extends BaseTest {
                 .andExpect(content().string(containsString("active-sessions__session-location-text")))
                 .andExpect(content().string(not(containsString("data-country-code="))))
                 .andExpect(content().string(not(containsString("active-sessions__session-flag"))));
-    }
-
-    @Test
-    void index_whenCountryIsNull_doesNotRenderLocationBlock() throws Exception {
-        when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
-                .thenReturn(List.of(sessionWithCountry(null)));
-
-        mockMvc.perform(get("/").with(oidcUser()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(not(containsString("active-sessions__session-location"))))
-                .andExpect(content().string(not(containsString("active-sessions__session-flag"))))
-                .andExpect(content().string(not(containsString("data-country-code="))));
     }
 
     private GovssoSession sessionWithCountry(String country) {
