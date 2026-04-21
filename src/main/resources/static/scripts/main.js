@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const activeSessionsEl = document.querySelector('.active-sessions');
 	const unknownCountry = activeSessionsEl?.dataset.unknownCountry || '';
+	const showCountry = activeSessionsEl?.dataset.showCountry === 'true';
 
 	function isValidCountryCode(code) {
     	return /^[A-Za-z]{2}$/.test(code);
@@ -85,10 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	document
 		.querySelectorAll('.active-sessions__session-location-text')
 		.forEach(locationTextEl => {
+		    const locationEl = locationTextEl.closest('.active-sessions__session-location');
 			const code = locationTextEl.dataset.countryCode;
-			const flagEl = locationTextEl
-				.closest('.active-sessions__session-location')
-				?.querySelector('.active-sessions__session-flag');
+			const flagEl = locationEl?.querySelector('.active-sessions__session-flag');
+
+            if (!showCountry) {
+                if (locationEl) {
+            	    locationEl.remove();
+                }
+                return;
+            }
 
 			if (!code || code.trim() === '') {
 				locationTextEl.textContent = unknownCountry;
