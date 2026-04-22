@@ -1,6 +1,6 @@
 package ee.ria.govsso.enduserselfservice.controller;
 
-import ee.ria.govsso.enduserselfservice.configuration.DashboardConfigurationProperties;
+import ee.ria.govsso.enduserselfservice.configuration.UiConfigurationProperties;
 import ee.ria.govsso.enduserselfservice.govssosession.GovssoSession;
 import ee.ria.govsso.enduserselfservice.govssosession.GovssoSessionService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import static java.util.Map.entry;
 public class IndexController {
 
     private final GovssoSessionService govssoSessionService;
-    private final DashboardConfigurationProperties dashboardConfigurationProperties;
+    private final UiConfigurationProperties uiConfigurationProperties;
 
     @GetMapping("/")
     public ModelAndView index(@AuthenticationPrincipal OidcUser oidcUser) {
@@ -36,7 +36,7 @@ public class IndexController {
         return Map.ofEntries(
                 entry("userAttributes", oidcUser.getAttributes()),
                 entry("govssoSessions", sessions),
-                Map.entry("showCountry", dashboardConfigurationProperties.showCountry()));
+                Map.entry("showCountry", uiConfigurationProperties.showCountry()));
     }
 
 }
