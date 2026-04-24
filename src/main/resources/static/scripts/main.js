@@ -7,18 +7,14 @@ const NOTICE_ALL_SUCCESS = 'all-sessions-ended';
 const FLAG_ICONS_VERSION = '7.5.0';  // Keep in sync with pom.xml flag-icons.version
 
 const endAllSessions = function () {
-	endSessionsRequest(
-		'/api/sessions',
-		NOTICE_ALL_SUCCESS,
-		getActiveSessionsMessage('endAllSessionsError')
-	);
+	endSessionsRequest('/api/sessions', NOTICE_ALL_SUCCESS, 'endAllSessionsError');
 };
 
 const endSession = function (sessionId) {
 	endSessionsRequest(
 		'/api/sessions/' + encodeURIComponent(sessionId),
 		NOTICE_SINGLE_SUCCESS,
-		getActiveSessionsMessage('endSessionError')
+		'endSessionError'
 	);
 };
 
@@ -44,18 +40,17 @@ const getActiveSessionsElement = function () {
 	return document.querySelector('.active-sessions');
 };
 
-const getActiveSessionsMessage = function (datasetKey) {
-	const activeSessionsEl = getActiveSessionsElement();
-	if (!activeSessionsEl) {
-		return null;
+const getActiveSessionsConfig = function () {
+	const configEl = document.getElementById('active-sessions-config');
+	if (!configEl) {
+		return {};
 	}
 
-	const message = activeSessionsEl.dataset[datasetKey];
-	if (!message || message.startsWith('??') || message.endsWith('??')) {
-		return null;
-	}
+	return JSON.parse(configEl.textContent);
+};
 
-	return message;
+const getActiveSessionsMessage = function (key) {
+	return getActiveSessionsConfig()[key] || null;
 };
 
 const reloadWithNotice = function (notice) {
@@ -72,57 +67,47 @@ const showSuccessNoticeFromUrl = function () {
 		return;
 	}
 
-	const messageByNotice = {
-		[NOTICE_SINGLE_SUCCESS]: getActiveSessionsMessage('endSessionSuccess'),
-		[NOTICE_ALL_SUCCESS]: getActiveSessionsMessage('endAllSessionsSuccess')
+	const messageKeyByNotice = {
+		[NOTICE_SINGLE_SUCCESS]: 'endSessionSuccess',
+		[NOTICE_ALL_SUCCESS]: 'endAllSessionsSuccess'
 	};
 
-	const message = messageByNotice[notice];
+	const messageKey = messageKeyByNotice[notice];
 
-	if (!message) {
+	if (!messageKey) {
 		return;
 	}
 
-	showNotice(message, 'alert alert-success');
+	showNotice(messageKey, 'success');
 
 	url.searchParams.delete(NOTICE_PARAM);
 	window.history.replaceState({}, document.title, url.toString());
 };
 
-const showError = function (message, error) {
+const showError = function (messageKey, error) {
 	if (error) {
 		console.error('Error', error);
 	}
+
+	showNotice(messageKey, 'error');
+};
+
+const showNotice = function (messageKey, type) {
+	const message = getActiveSessionsMessage(messageKey);
 
 	if (!message) {
 		return;
 	}
 
-	showNotice(message, 'alert alert-error');
-};
-
-const showNotice = function (message, className) {
-	const activeSessionsEl = getActiveSessionsElement();
-	if (!activeSessionsEl) {
+	const alertContainerEl = document.getElementById('session-alert-container');
+	if (!alertContainerEl) {
 		return;
 	}
 
-	let noticeEl = document.querySelector('.active-sessions__notice');
+	const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
 
-	if (!noticeEl) {
-		noticeEl = document.createElement('div');
-		noticeEl.className = 'active-sessions__notice';
-
-		const sessionsListEl = activeSessionsEl.querySelector('.active-sessions__list');
-		if (sessionsListEl) {
-			activeSessionsEl.insertBefore(noticeEl, sessionsListEl);
-		} else {
-			activeSessionsEl.prepend(noticeEl);
-		}
-	}
-
-	noticeEl.className = 'active-sessions__notice ' + className;
-	noticeEl.textContent = message;
+	alertContainerEl.className = 'active-sessions__alert-container alert ' + alertClass;
+	alertContainerEl.textContent = message;
 };
 
 const createCsrfHeader = function () {
@@ -170,8 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		? new Intl.DisplayNames([locale], {type: 'region'})
 		: null;
 
-	const activeSessionsEl = document.querySelector('.active-sessions');
-	const unknownCountry = activeSessionsEl?.dataset.unknownCountry || '';
+	const unknownCountry = getActiveSessionsMessage('unknownCountry') || '';
 
 	function isValidCountryCode(code) {
     	return /^[A-Za-z]{2}$/.test(code);

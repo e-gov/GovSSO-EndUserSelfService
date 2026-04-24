@@ -2,13 +2,17 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block layout:fragment="content" th:remove="tag">
-    <div class="active-sessions"
-        th:attr="
-            data-unknown-country=#{label.active-sessions.unknown-country},
-            data-end-session-success=#{label.active-sessions.end-session-success},
-            data-end-all-sessions-success=#{label.active-sessions.end-all-sessions-success},
-            data-end-session-error=#{label.active-sessions.end-session-error},
-            data-end-all-sessions-error=#{label.active-sessions.end-all-sessions-error}">
+    <script id="active-sessions-config" th:inline="javascript" type="application/json">
+        {
+            "unknownCountry": /*[[#{label.active-sessions.unknown-country}]]*/ "",
+            "endSessionSuccess": /*[[#{label.active-sessions.end-session-success}]]*/ "",
+            "endAllSessionsSuccess": /*[[#{label.active-sessions.end-all-sessions-success}]]*/ "",
+            "endSessionError": /*[[#{label.active-sessions.end-session-error}]]*/ "",
+            "endAllSessionsError": /*[[#{label.active-sessions.end-all-sessions-error}]]*/ ""
+        }
+    </script>
+
+    <div class="active-sessions">
         <div class="active-sessions__header">
             <h2 class="active-sessions__title" th:text="#{label.active-sessions.title}"/>
             <!-- TODO: active-sessions__info-button -->
@@ -16,6 +20,7 @@
                     data-function="end-all-sessions" th:if="${!#lists.isEmpty(govssoSessions)}"
                     th:text="#{label.active-sessions.end-all.button}"/>
         </div>
+        <div id="session-alert-container" class="active-sessions__alert-container"></div>
         <div class="active-sessions__list">
             <div class="active-sessions__no_sessions" th:if="${#lists.isEmpty(govssoSessions)}"
                  th:text="#{label.active-sessions.no-sessions}"/>
