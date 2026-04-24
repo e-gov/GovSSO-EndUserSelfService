@@ -36,7 +36,7 @@ public class IndexController {
         return Map.ofEntries(
                 entry("userAttributes", oidcUser.getAttributes()),
                 entry("govssoSessions", sessions),
-                Map.entry("showCountry", uiConfigurationProperties.showCountry()));
+                entry("showCountry", uiConfigurationProperties.showCountry()));
     }
 
 }
