@@ -55,7 +55,7 @@ $('[data-function="end-session"]').on('click', event => {
 
 $('[data-function="toggle-session-expansion"]').on('click', event => {
 	event.preventDefault();
-	const target = $(event.delegateTarget).closest(".active-sessions__session");
+    const target = $(event.delegateTarget).closest('.active-sessions__session');
 	$(target).toggleClass('active-sessions__session--expanded');
 	const expandCollapseIcon = $(target).find('.active-sessions__session-expand-toggle .icon');
 	$(expandCollapseIcon).toggleClass('icon-expand');
@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const activeSessionsEl = document.querySelector('.active-sessions');
 	const unknownCountry = activeSessionsEl?.dataset.unknownCountry || '';
-	const showCountry = activeSessionsEl?.dataset.showCountry === 'true';
 
 	function isValidCountryCode(code) {
     	return /^[A-Za-z]{2}$/.test(code);
@@ -89,13 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		    const locationEl = locationTextEl.closest('.active-sessions__session-location');
 			const code = locationTextEl.dataset.countryCode;
 			const flagEl = locationEl?.querySelector('.active-sessions__session-flag');
-
-            if (!showCountry) {
-                if (locationEl) {
-            	    locationEl.remove();
-                }
-                return;
-            }
 
 			if (!code || code.trim() === '') {
 				locationTextEl.textContent = unknownCountry;
@@ -120,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 });
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
     // https://github.com/ua-parser/uap-core/blob/master/regexes.yaml
 	const OS_ICONS = [
         {match: "windows", icon: "windows.svg"},

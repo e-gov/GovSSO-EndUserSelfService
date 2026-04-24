@@ -3,8 +3,7 @@
 <body>
 <th:block layout:fragment="content" th:remove="tag">
     <div class="active-sessions"
-         th:attr="data-unknown-country=#{label.active-sessions.unknown-country},
-                  data-show-country=${showCountry}">
+         th:attr="data-unknown-country=#{label.active-sessions.unknown-country}">
         <div class="active-sessions__header">
             <h2 class="active-sessions__title" th:text="#{label.active-sessions.title}"/>
             <!-- TODO: active-sessions__info-button -->
@@ -24,14 +23,14 @@
                     <div class="active-sessions__session-primary-data">
                         <th:block th:if="${!#lists.isEmpty(govssoSession.ipInfos)}">
                             <th:block th:with="country=${govssoSession.ipInfos.get(0).country}">
-                            <div class="active-sessions__session-location" translate="no">
-                                <img class="active-sessions__session-flag" alt="" loading="lazy"
-                                     th:if="${!#strings.isEmpty(country)}"/>
-                                <span
-                                    class="active-sessions__session-location-text"
-                                    th:attr="data-country-code=${country}">
+                                <div class="active-sessions__session-location" translate="no" th:if="${showCountry}">
+                                    <img class="active-sessions__session-flag" alt="" loading="lazy"
+                                         th:if="${!#strings.isEmpty(country)}"/>
+                                    <span
+                                         class="active-sessions__session-location-text"
+                                         th:attr="data-country-code=${country}">
                                 </span>
-                            </div>
+                                </div>
                             </th:block>
                         </th:block>
                         <div class="active-sessions__device-info" translate="no">
