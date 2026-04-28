@@ -36,21 +36,17 @@ const endSessionsRequest = async function (url, successNotice, errorMessage) {
 	}
 };
 
-const getActiveSessionsElement = function () {
-	return document.querySelector('.active-sessions');
-};
-
-const getActiveSessionsConfig = function () {
-	const configEl = document.getElementById('active-sessions-config');
-	if (!configEl) {
+const getActiveSessionsMessages = function () {
+	const messagesEl = document.getElementById('active-sessions-messages');
+	if (!messagesEl) {
 		return {};
 	}
 
-	return JSON.parse(configEl.textContent);
+	return JSON.parse(messagesEl.textContent);
 };
 
 const getActiveSessionsMessage = function (key) {
-	return getActiveSessionsConfig()[key] || null;
+	return getActiveSessionsMessages()[key] || null;
 };
 
 const reloadWithNotice = function (notice) {

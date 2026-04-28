@@ -2,7 +2,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block layout:fragment="content" th:remove="tag">
-    <script id="active-sessions-config" th:inline="javascript" type="application/json">
+    <script id="active-sessions-messages" th:inline="javascript" type="application/json">
         {
             "unknownCountry": /*[[#{label.active-sessions.unknown-country}]]*/ "",
             "endSessionSuccess": /*[[#{label.active-sessions.end-session-success}]]*/ "",
