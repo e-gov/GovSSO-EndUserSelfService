@@ -53,11 +53,11 @@ class InfoEndpointTest extends BaseTest {
     @Test
     void nonExistingEndpoint_ReturnsHttp404() {
         given()
-            .when()
-            .get("/non-existing-endpoint")
-            .then()
-            .assertThat()
-            .statusCode(404)
-            .body("error", equalTo("USER_INPUT"));
+                .when()
+                .get("/non-existing-endpoint")
+                .then()
+                .assertThat()
+                .statusCode(404)
+                .body("error", equalTo("USER_INPUT"));
     }
 }

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.ssl.SslContextFactory;
-import org.springframework.boot.actuate.health.CompositeHealthContributor;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.health.contributor.CompositeHealthContributor;
+import org.springframework.boot.health.contributor.HealthIndicator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,6 +1,5 @@
 package ee.ria.govsso.enduserselfservice.govssosession;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.govsso.enduserselfservice.logging.ClientRequestLogger;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
@@ -8,19 +7,20 @@ import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
+import tools.jackson.databind.json.JsonMapper;
 
 import javax.net.ssl.TrustManagerFactory;
 import java.io.InputStream;
 import java.security.KeyStore;
 
-import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 import static ee.ria.govsso.enduserselfservice.logging.ClientRequestLogger.Service.SESSION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static tools.jackson.databind.PropertyNamingStrategies.SNAKE_CASE;
 
 @Configuration
 public class GovssoSessionRestConfiguration {
@@ -33,7 +33,7 @@ public class GovssoSessionRestConfiguration {
     @Bean
     public WebClient govssoSessionWebClient(KeyStore govssoSessionTrustStore,
                                             GovssoSessionConfigurationProperties properties,
-                                            ObjectMapper objectMapper,
+                                            JsonMapper objectMapper,
                                             ClientRequestLogger requestLogger) {
         SslContext sslContext = initSslContext(govssoSessionTrustStore);
 
@@ -43,16 +43,17 @@ public class GovssoSessionRestConfiguration {
                 .baseUrl(properties.baseUrl().toString())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .codecs(configurer -> {
-                    configurer.defaultCodecs().jackson2JsonDecoder(
-                            new Jackson2JsonDecoder(customizeObjectMapper(objectMapper), APPLICATION_JSON));
+                    configurer.defaultCodecs().jacksonJsonDecoder(
+                            new JacksonJsonDecoder(customizeObjectMapper(objectMapper), APPLICATION_JSON));
                 })
                 .filter(responseFilter(requestLogger))
                 .build();
     }
 
-    private ObjectMapper customizeObjectMapper(ObjectMapper objectMapper) {
-        return objectMapper.copy()
-                .setPropertyNamingStrategy(SNAKE_CASE);
+    private JsonMapper customizeObjectMapper(JsonMapper objectMapper) {
+        return objectMapper.rebuild()
+                .propertyNamingStrategy(SNAKE_CASE)
+                .build();
     }
 
     @Bean

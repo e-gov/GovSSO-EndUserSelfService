@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -22,7 +22,8 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class SecurityConfigurer {
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
-            RestOperations taraRestTemplate,
+            RestTemplate taraRestTemplate,
             ClientRegistrationRepository clientRegistrationRepository,
             LocaleResolver localeResolver,
             SessionConfigurationProperties sessionConfigurationProperties) throws Exception {
@@ -86,12 +87,16 @@ public class SecurityConfigurer {
         return http.build();
     }
 
-    private static DefaultAuthorizationCodeTokenResponseClient createAccessTokenResponseClient(
-            RestOperations taraRestTemplate
+    private static RestClientAuthorizationCodeTokenResponseClient createAccessTokenResponseClient(
+            RestTemplate taraRestTemplate
     ) {
-        DefaultAuthorizationCodeTokenResponseClient accessTokenResponseClient =
-                new DefaultAuthorizationCodeTokenResponseClient();
-        accessTokenResponseClient.setRestOperations(taraRestTemplate);
+        RestClientAuthorizationCodeTokenResponseClient accessTokenResponseClient =
+                new RestClientAuthorizationCodeTokenResponseClient();
+
+        // TODO: Replace taraRestTemplate with a RestClient bean once the surrounding configuration
+        // is migrated to RestClient. This avoids creating a RestClient wrapper here.
+        accessTokenResponseClient.setRestClient(RestClient.create(taraRestTemplate));
+
         return accessTokenResponseClient;
     }
 

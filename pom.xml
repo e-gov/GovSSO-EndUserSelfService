@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.14</version>
+        <version>4.0.6</version>
         <relativePath/><!-- Lookup parent from repository. -->
     </parent>
 
@@ -35,7 +35,8 @@
         <ignite.version>2.18.0</ignite.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <jquery.version>3.7.1</jquery.version><!-- Keep in sync with the versioned jQuery path used in layout.html -->
-        <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version><!-- TODO Upgrade to logstash-logback-encoder 9.x with Spring Boot 4.x, both upgrade to Jackson 3 -->
+        <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
+        <rest-assured.version>6.0.0</rest-assured.version>
         <wiremock.version>3.13.2</wiremock.version>
     </properties>
 
@@ -97,6 +98,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
@@ -130,11 +135,17 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-mock-mvc</artifactId>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
