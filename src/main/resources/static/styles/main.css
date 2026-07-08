@@ -265,9 +265,13 @@ body {
 	}
 }
 
+.c-header__logo-link img {
+	width: auto;
+	height: 80px
+}
+
 @media (max-width: 800px) {
 	.c-header__logo-link img {
-		width: auto;
 		height: 60px
 	}
 }
