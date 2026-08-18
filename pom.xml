@@ -12,7 +12,7 @@
 
     <groupId>ee.ria.govsso</groupId>
     <artifactId>govsso-enduserselfservice</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2</version>
 
     <name>GovSSO End User Self-Service</name>
     <licenses>
@@ -30,10 +30,10 @@
         <imageName>${project.artifactId}:latest</imageName>
         <githubMirror>https://github.com</githubMirror>
 
-        <elastic-apm.version>1.55.6</elastic-apm.version>
+        <elastic-apm.version>1.56.0</elastic-apm.version>
         <flag-icons.version>7.5.0</flag-icons.version><!-- Keep in sync with the versioned flag-icons path used in main.js -->
         <ignite.version>2.18.0</ignite.version>
-        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <jquery.version>3.7.1</jquery.version><!-- Keep in sync with the versioned jQuery path used in layout.html -->
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <rest-assured.version>6.0.0</rest-assured.version>
