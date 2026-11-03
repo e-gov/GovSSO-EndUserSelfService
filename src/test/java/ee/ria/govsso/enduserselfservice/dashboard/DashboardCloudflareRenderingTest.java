@@ -47,10 +47,9 @@ class DashboardCloudflareRenderingTest extends BaseTest {
                 .andExpect(content().string(containsString("active-sessions__session-location")))
                 .andExpect(content().string(containsString("active-sessions__session-flag")))
                 .andExpect(content().string(containsString("data-country-code=\"EE\"")))
-                .andExpect(content().string(containsString("data-os=\"Windows\"")))
-                .andExpect(content().string(containsString(">Windows<")))
-                .andExpect(content().string(containsString("data-browser=\"Chrome\"")))
-                .andExpect(content().string(containsString("Chrome,")))
+                .andExpect(content().string(containsString("Windows · Chrome")))
+                .andExpect(content().string(not(containsString("data-os="))))
+                .andExpect(content().string(not(containsString("data-browser="))))
                 .andExpect(content().string(containsString("192.168.1.5")))
                 .andExpect(content().string(containsString("00000000-0000-0000-0000-111111111111")));
     }
@@ -67,6 +66,39 @@ class DashboardCloudflareRenderingTest extends BaseTest {
                 .andExpect(content().string(containsString("active-sessions__session-location-text")))
                 .andExpect(content().string(not(containsString("data-country-code="))))
                 .andExpect(content().string(not(containsString("active-sessions__session-flag"))));
+    }
+
+    @Test
+    void index_whenBrowserIsMissing_rendersOnlyOs() throws Exception {
+        when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
+                .thenReturn(List.of(session("Windows", null)));
+
+        mockMvc.perform(get("/").with(oidcUser()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(">Windows<")))
+                .andExpect(content().string(not(containsString(" · "))));
+    }
+
+    @Test
+    void index_whenOsAndBrowserAreMissing_rendersOtherDevice() throws Exception {
+        when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
+                .thenReturn(List.of(session(null, null)));
+
+        mockMvc.perform(get("/").with(oidcUser()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Muu seade")));
+    }
+
+    private GovssoSession session(String os, String browser) {
+        return new GovssoSession(
+                "00000000-0000-0000-0000-111111111111",
+                OffsetDateTime.parse("2023-01-01T10:00:00Z"),
+                List.of(new GovssoSession.IpInfo("192.168.1.5", "EE")),
+                "Mozilla/5.0",
+                os,
+                browser,
+                List.of()
+        );
     }
 
     private GovssoSession sessionWithCountry(String country) {

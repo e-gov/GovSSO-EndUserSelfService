@@ -1156,28 +1156,14 @@ button.link:hover{
     white-space: nowrap;
 }
 
-.active-sessions__device-info,
-.active-sessions__browser-info {
+.active-sessions__device-info {
     white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
     flex-shrink: 0;
-    min-width: 100px;
+    min-width: 180px;
 }
 
-.active-sessions__device-icon,
-.active-sessions__browser-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-.active-sessions__browser-and-services {
-    display: inline-flex;
-    align-items: center;
+.active-sessions__services {
     white-space: nowrap;
-    min-width: 200px;
     flex-shrink: 0;
 }
 
@@ -1185,9 +1171,7 @@ button.link:hover{
     display: inline-flex;
     align-items: center;
 }
-.active-sessions__session-flag:not([src]),
-.active-sessions__device-icon:not([src]),
-.active-sessions__browser-icon:not([src]) {
+.active-sessions__session-flag:not([src]) {
     display: none;
 }
 
