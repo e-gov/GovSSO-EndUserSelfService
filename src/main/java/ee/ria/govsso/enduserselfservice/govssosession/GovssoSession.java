@@ -3,6 +3,7 @@ package ee.ria.govsso.enduserselfservice.govssosession;
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,16 @@ public record GovssoSession(
              OffsetDateTime authenticatedAt,
              OffsetDateTime expiresAt,
              OffsetDateTime lastUpdatedAt
-    ) {}
+    ) {
+
+        /**
+         * GovSSO Session returns 1970-01-01T00:00:00Z as expires_at for SECURED_APP (long-living) sessions, as their
+         * consents have no expiry. Such services are displayed as active (AUT-2776), until the UX is clarified (AUT-2812).
+         */
+        public boolean isActive() {
+            return Instant.EPOCH.equals(expiresAt.toInstant()) || expiresAt.isAfter(lastUpdatedAt);
+        }
+    }
 
     @Jacksonized
     @Builder

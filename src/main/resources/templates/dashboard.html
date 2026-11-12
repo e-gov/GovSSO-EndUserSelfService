@@ -82,9 +82,9 @@
                                 <strong translate="no" th:text="${service.clientNames.get(#locale.language)}"/>,
                                 <th:block
                                         th:text="#{label.active-sessions.service-start-time(${#prettyDates.dateTime(service.authenticatedAt)})}"/>,
-                                <th:block th:if="${service.expiresAt.isAfter(service.lastUpdatedAt)}"
+                                <th:block th:if="${service.active}"
                                         th:text="#{label.active-sessions.service-last-active-time(${#prettyDates.dateTime(service.lastUpdatedAt)})}"/>
-                                <th:block th:unless="${service.expiresAt.isAfter(service.lastUpdatedAt)}"
+                                <th:block th:unless="${service.active}"
                                         th:text="#{label.active-sessions.service-inactive-since-time(${#prettyDates.dateTime(service.expiresAt)})}"/>
                             </p>
                         </div>
