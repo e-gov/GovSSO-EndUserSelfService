@@ -27,8 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DashboardServiceActivityRenderingTest extends BaseTest {
 
     public static final String SUBJECT_SESSION = "test1234";
-    private static final OffsetDateTime AUTHENTICATED_AT = OffsetDateTime.parse("2026-11-09T16:20:26Z");
-    private static final OffsetDateTime EPOCH = OffsetDateTime.parse("1970-01-01T00:00:00Z");
+    private static final OffsetDateTime AUTHENTICATED_AT = OffsetDateTime.now().minusHours(1);
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,9 +36,9 @@ class DashboardServiceActivityRenderingTest extends BaseTest {
     private GovssoSessionService govssoSessionService;
 
     @Test
-    void index_whenServiceIsSecuredAppWithEpochExpiresAt_rendersServiceAsActive() throws Exception {
+    void index_whenServiceHasNoExpiry_rendersServiceAsActive() throws Exception {
         when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
-                .thenReturn(List.of(sessionWithService(EPOCH, AUTHENTICATED_AT)));
+                .thenReturn(List.of(sessionWithService(null, AUTHENTICATED_AT)));
 
         mockMvc.perform(get("/").with(oidcUser()))
                 .andExpect(status().isOk())
@@ -49,9 +48,10 @@ class DashboardServiceActivityRenderingTest extends BaseTest {
     }
 
     @Test
-    void index_whenServiceExpiresAfterLastUpdate_rendersServiceAsActive() throws Exception {
+    void index_whenServiceExpiresInFuture_rendersServiceAsActive() throws Exception {
+        OffsetDateTime expiresAt = OffsetDateTime.now().plusMinutes(10);
         when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
-                .thenReturn(List.of(sessionWithService(AUTHENTICATED_AT.plusMinutes(15), AUTHENTICATED_AT)));
+                .thenReturn(List.of(sessionWithService(expiresAt, expiresAt.minusMinutes(15))));
 
         mockMvc.perform(get("/").with(oidcUser()))
                 .andExpect(status().isOk())
@@ -61,9 +61,9 @@ class DashboardServiceActivityRenderingTest extends BaseTest {
 
     @Test
     void index_whenServiceHasExpired_rendersServiceAsInactive() throws Exception {
-        OffsetDateTime expiresAt = AUTHENTICATED_AT.plusMinutes(15);
+        OffsetDateTime expiresAt = OffsetDateTime.now().minusMinutes(10);
         when(govssoSessionService.getSubjectSessions(SUBJECT_SESSION))
-                .thenReturn(List.of(sessionWithService(expiresAt, expiresAt)));
+                .thenReturn(List.of(sessionWithService(expiresAt, expiresAt.minusMinutes(15))));
 
         mockMvc.perform(get("/").with(oidcUser()))
                 .andExpect(status().isOk())

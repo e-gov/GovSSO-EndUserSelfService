@@ -3,7 +3,6 @@ package ee.ria.govsso.enduserselfservice.govssosession;
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -30,15 +29,8 @@ public record GovssoSession(
              OffsetDateTime lastUpdatedAt
     ) {
 
-        // GovSSO Session returns this value for consents without expiry (SECURED_APP sessions).
-        private static final Instant NO_EXPIRY = Instant.EPOCH;
-
         public boolean isActive() {
-            return hasNoExpiry() || expiresAt.isAfter(lastUpdatedAt);
-        }
-
-        private boolean hasNoExpiry() {
-            return NO_EXPIRY.equals(expiresAt.toInstant());
+            return expiresAt == null || expiresAt.isAfter(OffsetDateTime.now());
         }
     }
 
