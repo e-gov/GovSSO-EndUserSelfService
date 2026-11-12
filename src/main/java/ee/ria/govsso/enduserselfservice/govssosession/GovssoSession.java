@@ -30,14 +30,15 @@ public record GovssoSession(
              OffsetDateTime lastUpdatedAt
     ) {
 
-        private static final Instant SECURED_APP_EXPIRES_AT = Instant.EPOCH;
+        // GovSSO Session returns this value for consents without expiry (SECURED_APP sessions).
+        private static final Instant NO_EXPIRY = Instant.EPOCH;
 
         public boolean isActive() {
-            return isSecuredApp() || expiresAt.isAfter(lastUpdatedAt);
+            return hasNoExpiry() || expiresAt.isAfter(lastUpdatedAt);
         }
 
-        private boolean isSecuredApp() {
-            return SECURED_APP_EXPIRES_AT.equals(expiresAt.toInstant());
+        private boolean hasNoExpiry() {
+            return NO_EXPIRY.equals(expiresAt.toInstant());
         }
     }
 
