@@ -3,6 +3,7 @@ package ee.ria.govsso.enduserselfservice.govssosession;
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,12 @@ public record GovssoSession(
              OffsetDateTime authenticatedAt,
              OffsetDateTime expiresAt,
              OffsetDateTime lastUpdatedAt
-    ) {}
+    ) {
+
+        public boolean isActiveAt(Instant instant) {
+            return expiresAt == null || expiresAt.toInstant().isAfter(instant);
+        }
+    }
 
     @Jacksonized
     @Builder
