@@ -96,6 +96,9 @@ public class GovssoSessionService {
     }
 
     private OffsetDateTime withLocalTimeZone(OffsetDateTime offsetDateTime) {
+        if (offsetDateTime == null) {
+            return null;
+        }
         return offsetDateTime.atZoneSameInstant(timeConfigurationProperties.localZone()).toOffsetDateTime();
     }
 

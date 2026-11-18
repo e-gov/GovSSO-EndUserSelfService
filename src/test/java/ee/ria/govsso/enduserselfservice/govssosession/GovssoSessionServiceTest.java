@@ -21,6 +21,7 @@ import java.util.function.Function;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.eq;
@@ -123,6 +124,33 @@ class GovssoSessionServiceTest {
         );
 
         verify(requestLogger).logResponse(eq(HttpStatus.OK.value()), any());
+    }
+
+    @Test
+    void getSubjectSessions_WhenServiceHasNoExpiry_ReturnsServiceWithoutExpiresAt() {
+        OffsetDateTime utcTime = OffsetDateTime.parse("2024-01-01T10:00:00Z");
+
+        GovssoSession backendSession = GovssoSession.builder()
+                .sessionId("session-1")
+                .authenticatedAt(utcTime)
+                .ipInfos(List.of())
+                .services(List.of(
+                        GovssoSession.Service.builder()
+                                .clientNames(Map.of("en", "Test service"))
+                                .authenticatedAt(utcTime)
+                                .expiresAt(null)
+                                .lastUpdatedAt(utcTime)
+                                .build()
+                ))
+                .build();
+
+        when(responseSpec.bodyToFlux(GovssoSession.class)).thenReturn(Flux.just(backendSession));
+
+        List<GovssoSession> result = service.getSubjectSessions("subject-1");
+
+        GovssoSession.Service sessionService = result.get(0).services().get(0);
+        assertThat(sessionService.expiresAt(), nullValue());
+        assertThat(sessionService.lastUpdatedAt().toInstant(), equalTo(utcTime.toInstant()));
     }
 
     @Test
